@@ -1,0 +1,8 @@
+{
+    "cubeSize" : 25,
+    "spawnPosition" : 0.5,
+    "spawnRotation" : 90,
+
+    "speed" : 5,
+    "steering" : 5
+}
