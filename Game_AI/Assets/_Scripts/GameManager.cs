@@ -11,6 +11,7 @@ public class GameManager : MonoBehaviour
         public int cubeSize;
         public float spawnPosition;
         public int spawnRotation;
+        public int spawnNumRange;
     }
 
     [SerializeField]
@@ -33,8 +34,11 @@ public class GameManager : MonoBehaviour
 
     IEnumerator CreateObj()
     {
+        GameObject fish;
+        GameObject fishList = GameObject.Find("FishList");
+
         float range = value.cubeSize * value.spawnPosition;
-        for (int i = 0; i < 200; i++)
+        for (int i = 0; i < value.spawnNumRange; i++)
         {
             Vector3 pos = new Vector3(Random.Range(-range, range),
                                       Random.Range(-range, range),
@@ -43,7 +47,8 @@ public class GameManager : MonoBehaviour
                                       Random.Range(-value.spawnRotation, value.spawnRotation),
                                       0);
 
-            Instantiate(Resources.Load("Prefabs/Fish"), pos, Quaternion.Euler(dir));
+            fish = Instantiate(Resources.Load("Prefabs/Fish"), pos, Quaternion.Euler(dir)) as GameObject;
+            fish.transform.SetParent(fishList.transform);
         }
         yield return null;
     }

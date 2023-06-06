@@ -2,8 +2,9 @@
     "cubeSize" : 25,
     "spawnPosition" : 0.5,
     "spawnRotation" : 180,
+    "spawnNumRange" : 500,
 
-    "speed" : 10,
-    "steering" : 5,
-    "feelerLength" : 40
+    "speed" : 20,
+    "steeringForce" : 7,
+    "feelerLength" : 20
 }
