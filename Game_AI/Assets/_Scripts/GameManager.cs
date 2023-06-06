@@ -8,10 +8,10 @@ public class GameManager : MonoBehaviour
     [System.Serializable]
     class Value
     {
-        public int cubeSize;
-        public float spawnPosition;
-        public int spawnRotation;
-        public int spawnNumRange;
+        public int      cubeSize;
+        public float    spawnPosition;
+        public int      spawnRotation;
+        public int      spawnNumRange;
     }
 
     [SerializeField]

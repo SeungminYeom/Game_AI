@@ -4,7 +4,8 @@
     "spawnRotation" : 180,
     "spawnNumRange" : 500,
 
-    "speed" : 20,
+    "speed" : 10,
     "steeringForce" : 7,
-    "feelerLength" : 20
+    "feelerLength" : 20,
+    "searchDistance" : 10
 }

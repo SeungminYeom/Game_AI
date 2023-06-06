@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class Movement : MonoBehaviour
@@ -11,35 +12,47 @@ public class Movement : MonoBehaviour
         public float steeringForce;
 
         public float feelerLength;
+        public float searchDistance;
     }
 
     [SerializeField]
     Value value;
 
     Rigidbody rigid;
-    Vector3 wallAvoidenceVec;
 
-    float deceleration = 1;
+    Vector3 dirToLook;
+    Vector3 wallAvoidenceVec;
+    [SerializeField] Vector3 cohesionVec;
+
+    int wallMask;
+    int fishMask;
 
     private void Awake()
     {
-        value       = JsonUtility.FromJson<Value>(Resources.Load<TextAsset>("Json/Value").text);
-        rigid       = GetComponent<Rigidbody>();
+        value = JsonUtility.FromJson<Value>(Resources.Load<TextAsset>("Json/Value").text);
+        rigid = GetComponent<Rigidbody>();
     }
 
     void Start()
     {
+        wallMask = 1 << LayerMask.NameToLayer("Wall");
+        fishMask = 1 << LayerMask.NameToLayer("Fish");
     }
 
     void Update()
     {
         wallAvoidenceVec = WallAvoidence();
-        transform.localRotation = Quaternion.LookRotation(wallAvoidenceVec);
+        cohesionVec = Cohesion();
+        dirToLook = wallAvoidenceVec + cohesionVec;
+        dirToLook = Vector3.Lerp(transform.forward, dirToLook, Time.deltaTime);
+        //cohesionVec = Vector3.Lerp(transform.forward, cohesionVec, Time.deltaTime);
+        transform.localRotation = Quaternion.LookRotation(dirToLook);
+        //transform.localRotation = Quaternion.LookRotation(cohesionVec);
+        //transform.localRotation = Quaternion.LookRotation(wallAvoidenceVec);
     }
 
     private void FixedUpdate()
     {
-
         Vector3 vec = transform.forward * value.speed;
         rigid.velocity = vec;
     }
@@ -48,14 +61,13 @@ public class Movement : MonoBehaviour
     {
         RaycastHit[] hit = new RaycastHit[4];
         RaycastHit proximateHit;
+        float feelerLength = value.feelerLength;
 
-        //6번 레이어의 정보, LayerMask는 bit flag임.
-        int mask = (1 << 6);
-        Physics.Raycast(transform.localPosition, transform.forward, out proximateHit, value.feelerLength, mask);
-        Physics.Raycast(transform.localPosition, transform.forward + transform.right, out hit[0], value.feelerLength * 0.5f, mask);
-        Physics.Raycast(transform.localPosition, transform.forward - transform.right, out hit[1], value.feelerLength * 0.5f, mask);
-        Physics.Raycast(transform.localPosition, transform.forward + transform.up, out hit[2], value.feelerLength * 0.5f, mask);
-        Physics.Raycast(transform.localPosition, transform.forward - transform.up, out hit[3], value.feelerLength * 0.5f, mask);
+        Physics.Raycast(transform.localPosition, transform.forward, out proximateHit, value.feelerLength, wallMask);
+        Physics.Raycast(transform.localPosition, transform.forward + transform.right, out hit[0], value.feelerLength * 0.5f, wallMask);
+        Physics.Raycast(transform.localPosition, transform.forward - transform.right, out hit[1], value.feelerLength * 0.5f, wallMask);
+        Physics.Raycast(transform.localPosition, transform.forward + transform.up, out hit[2], value.feelerLength * 0.5f, wallMask);
+        Physics.Raycast(transform.localPosition, transform.forward - transform.up, out hit[3], value.feelerLength * 0.5f, wallMask);
 
         // 가장 가까운 hit 찾기
         for (int i = 0; i < hit.Length; i++)
@@ -65,6 +77,7 @@ public class Movement : MonoBehaviour
             if (proximateHit.distance > hit[i].distance)
             {
                 proximateHit = hit[i];
+                feelerLength = value.feelerLength * 0.5f;
             }
         }
 
@@ -84,22 +97,55 @@ public class Movement : MonoBehaviour
 
         if (proximateHit.collider != null)
         {
-            Vector3 steeringForce = proximateHit.normal * (value.feelerLength - proximateHit.distance) * value.steeringForce;
-            steeringForce = Vector3.Lerp(transform.forward, steeringForce, Time.deltaTime);
+            Vector3 steeringForce = proximateHit.normal * (feelerLength - proximateHit.distance) * value.steeringForce;
+            //steeringForce = Vector3.Lerp(transform.forward, steeringForce, Time.deltaTime);
             return steeringForce;
-            //transform.rotation = Quaternion.LookRotation(steeringForce);
         }
 
         return transform.forward;
     }
 
+    // 주변 물고기의 중심 벡터로 이동
+    Vector3 Cohesion()
+    {
+        Collider[] hits = Physics.OverlapSphere(transform.localPosition, value.searchDistance, fishMask);
+        Vector3 centerVec = Vector3.zero;
+
+        if (hits.Length > 0)
+        {
+            foreach (var hit in hits)
+            {
+                centerVec += hit.transform.position;
+            }
+        }
+        else
+        {
+            return centerVec;
+        }
+
+        centerVec /= hits.Length;
+        centerVec -= transform.position;
+        centerVec.Normalize();
+
+        return centerVec;
+    }
+
+    // 주변 물고기의 Heading 벡터의 평균으로 회전
+
+
+    // 주변 물고기와 거리 벌리기
+
     public void OnDrawGizmos()
     {
         Gizmos.color = Color.green;
         Gizmos.DrawLine(transform.localPosition, transform.localPosition + transform.forward * value.feelerLength);
-        Gizmos.DrawLine(transform.localPosition, transform.localPosition + (transform.forward + transform.right).normalized * value.feelerLength * 0.5f);
-        Gizmos.DrawLine(transform.localPosition, transform.localPosition + (transform.forward - transform.right).normalized * value.feelerLength * 0.5f);
-        Gizmos.DrawLine(transform.localPosition, transform.localPosition + (transform.forward + transform.up).normalized * value.feelerLength * 0.5f);
-        Gizmos.DrawLine(transform.localPosition, transform.localPosition + (transform.forward - transform.up).normalized * value.feelerLength * 0.5f);
+        //Gizmos.DrawLine(transform.localPosition, transform.localPosition + (transform.forward + transform.right).normalized * value.feelerLength * 0.5f);
+        //Gizmos.DrawLine(transform.localPosition, transform.localPosition + (transform.forward - transform.right).normalized * value.feelerLength * 0.5f);
+        //Gizmos.DrawLine(transform.localPosition, transform.localPosition + (transform.forward + transform.up).normalized * value.feelerLength * 0.5f);
+        //Gizmos.DrawLine(transform.localPosition, transform.localPosition + (transform.forward - transform.up).normalized * value.feelerLength * 0.5f);
+
+        Gizmos.color = Color.white;
+        //Gizmos.DrawWireSphere(transform.position, value.searchDistance);
+        //Gizmos.DrawLine(transform.localPosition, transform.localPosition + Cohesion() * value.feelerLength);
     }
 }

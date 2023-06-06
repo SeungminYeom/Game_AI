@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 5357374573170504785}
   - component: {fileID: 9076701993598630900}
   - component: {fileID: 6490279796555534142}
+  - component: {fileID: 6010686835576521379}
   - component: {fileID: 7552693468992018150}
   - component: {fileID: 8042511974100004354}
   m_Layer: 7
@@ -85,6 +86,19 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!135 &6010686835576521379
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4689064590275374827}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.06
+  m_Center: {x: 0, y: 0.005110882, z: -0.04}
 --- !u!54 &7552693468992018150
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -115,5 +129,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   value:
     speed: 0
-    steering: 0
+    steeringForce: 0
     feelerLength: 0
+    searchDistance: 0
+  cohesionVec: {x: 0, y: 0, z: 0}
+  fm:
+    serializedVersion: 2
+    m_Bits: 0
