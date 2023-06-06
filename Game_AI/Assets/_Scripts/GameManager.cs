@@ -39,9 +39,9 @@ public class GameManager : MonoBehaviour
             Vector3 pos = new Vector3(Random.Range(-range, range),
                                       Random.Range(-range, range),
                                       Random.Range(-range, range));
-            Vector3 dir = new Vector3(0,
+            Vector3 dir = new Vector3(Random.Range(-value.spawnRotation, value.spawnRotation),
                                       Random.Range(-value.spawnRotation, value.spawnRotation),
-                                      Random.Range(-value.spawnRotation, value.spawnRotation));
+                                      0);
 
             Instantiate(Resources.Load("Prefabs/Fish"), pos, Quaternion.Euler(dir));
         }
