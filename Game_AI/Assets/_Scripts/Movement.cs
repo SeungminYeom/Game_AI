@@ -10,8 +10,11 @@ public class Movement : MonoBehaviour
     class Value
     {
         public float speed;
-        public float wallAvoidenceSteeringForce;
+
+        public float avoidanceSteeringForce;
         public float cohesionSteeringForce;
+        public float alignmentSteeringForce;
+        public float separationSteeringForce;
 
         public float feelerLength;
         public float searchDistance;
@@ -22,14 +25,15 @@ public class Movement : MonoBehaviour
 
     Rigidbody rigid;
 
-    List<Collider> colliders;
+    List<Collider> collidersInSight;
 
     Coroutine search;
 
     Vector3 dirToLook;
-    Vector3 wallAvoidenceVec;
+    Vector3 avoidenceVec;
     Vector3 cohesionVec;
     Vector3 alignmentVec;
+    Vector3 separationVec;
 
     int wallMask;
     int fishMask;
@@ -42,7 +46,7 @@ public class Movement : MonoBehaviour
 
     void Start()
     {
-        colliders = new List<Collider>();
+        collidersInSight = new List<Collider>();
 
         wallMask = 1 << LayerMask.NameToLayer("Wall");
         fishMask = 1 << LayerMask.NameToLayer("Fish");
@@ -52,17 +56,14 @@ public class Movement : MonoBehaviour
 
     void Update()
     {
-        wallAvoidenceVec = WallAvoidence() * 0;
-        cohesionVec = Cohesion();
-        alignmentVec = Alignment();
-        //dirToLook = wallAvoidenceVec + cohesionVec + alignmentVec;
-        dirToLook = cohesionVec + alignmentVec;
+        avoidenceVec = Avoidence();
+        cohesionVec = Cohesion() * value.cohesionSteeringForce;
+        alignmentVec = Alignment() * value.alignmentSteeringForce;
+        separationVec = Separation() * value.separationSteeringForce;
+
+        dirToLook = avoidenceVec + cohesionVec + alignmentVec + separationVec;
         dirToLook = Vector3.Lerp(transform.forward, dirToLook, Time.deltaTime);
-        //cohesionVec = Vector3.Lerp(transform.forward, cohesionVec, Time.deltaTime);
-        //wallAvoidenceVec = Vector3.Lerp(transform.forward, wallAvoidenceVec, Time.deltaTime);
         transform.localRotation = Quaternion.LookRotation(dirToLook);
-        //transform.localRotation = Quaternion.LookRotation(cohesionVec);
-        //transform.localRotation = Quaternion.LookRotation(wallAvoidenceVec);
     }
 
     private void FixedUpdate()
@@ -73,28 +74,22 @@ public class Movement : MonoBehaviour
 
     IEnumerator Search()
     {
-        if (colliders.Count > 0)
-        {
-            colliders.Clear();
-        }
+        if (collidersInSight.Count > 0)
+            collidersInSight.Clear();
 
         Collider[] hits = Physics.OverlapSphere(transform.localPosition, value.searchDistance, fishMask);
 
         foreach (var hit in hits)
         {
-            colliders.Add(hit);
+            if (Vector3.Dot(hit.transform.position, transform.position) > 0.96f)
+                collidersInSight.Add(hit);
         }
 
-        //for (int i = 0; i < Mathf.Clamp(hits.Length, 1, 20); i++)
-        //{
-        //    colliders.Add(hits[i]);
-        //}
-
-        yield return new WaitForSeconds(Random.Range(0.1f, 0.5f));
+        yield return new WaitForSeconds(Random.Range(0.3f, 0.7f));
         search = StartCoroutine(Search());
     }
 
-    Vector3 WallAvoidence()
+    Vector3 Avoidence()
     {
         RaycastHit[] hit = new RaycastHit[4];
         RaycastHit proximateHit;
@@ -134,9 +129,8 @@ public class Movement : MonoBehaviour
 
         if (proximateHit.collider != null)
         {
-            //Vector3 steeringForce = proximateHit.normal * (feelerLength - proximateHit.distance) * value.steeringForce;
-            Vector3 steeringForce = proximateHit.normal * (feelerLength / proximateHit.distance) * value.wallAvoidenceSteeringForce;
-            //steeringForce = Vector3.Lerp(transform.forward, steeringForce, Time.deltaTime);
+            //Vector3 steeringForce = proximateHit.normal * (feelerLength / proximateHit.distance) * value.avoidanceSteeringForce;
+            Vector3 steeringForce = proximateHit.normal * Mathf.Pow((feelerLength / proximateHit.distance), 2);
             return steeringForce;
         }
 
@@ -146,12 +140,11 @@ public class Movement : MonoBehaviour
     // 주변 물고기의 중심 벡터로 이동
     Vector3 Cohesion()
     {
-        //Collider[] hits = Physics.OverlapSphere(transform.localPosition, value.searchDistance, fishMask);
         Vector3 centerVec = Vector3.zero;
 
-        if (colliders.Count > 0)
+        if (collidersInSight.Count > 1)
         {
-            foreach (var hit in colliders)
+            foreach (var hit in collidersInSight)
             {
                 centerVec += hit.transform.position;
             }
@@ -161,23 +154,21 @@ public class Movement : MonoBehaviour
             return centerVec;
         }
 
-        centerVec /= colliders.Count;
+        centerVec /= collidersInSight.Count;
         centerVec -= transform.position;
         centerVec.Normalize();
 
-        // SteeringForce가 speed와 같거나 근접할 때 제일 자연스러움. 따라서 같은 값을 사용하거나 speed값을 사용
-        return centerVec * value.cohesionSteeringForce;
+        return centerVec;
     }
 
     // 주변 물고기의 Heading 벡터의 평균으로 회전
     Vector3 Alignment()
     {
-        //Collider[] hits = Physics.OverlapSphere(transform.localPosition, value.searchDistance, fishMask);
         Vector3 centerVec = Vector3.zero;
 
-        if (colliders.Count > 0)
+        if (collidersInSight.Count > 1)
         {
-            foreach (var hit in colliders)
+            foreach (var hit in collidersInSight)
             {
                 centerVec += hit.transform.forward;
             }
@@ -187,8 +178,8 @@ public class Movement : MonoBehaviour
             return centerVec;
         }
 
-        centerVec /= colliders.Count;
-        centerVec -= transform.position;
+        centerVec /= collidersInSight.Count;
+        centerVec -= transform.forward;
         centerVec.Normalize();
 
         return centerVec;
@@ -199,11 +190,14 @@ public class Movement : MonoBehaviour
     {
         Vector3 centerVec = Vector3.zero;
 
-        if (colliders.Count > 0)
+        if (collidersInSight.Count > 1)
         {
-            foreach (var hit in colliders)
+            foreach (var hit in collidersInSight)
             {
-                centerVec += hit.transform.forward;
+                Vector3 toThisFish = transform.position - hit.transform.position;
+                if (toThisFish.magnitude < 0.0001f) continue;
+
+                centerVec += toThisFish.normalized / toThisFish.magnitude;
             }
         }
         else
@@ -211,24 +205,20 @@ public class Movement : MonoBehaviour
             return centerVec;
         }
 
-        centerVec /= colliders.Count;
-        centerVec -= transform.position;
-        centerVec.Normalize();
-
         return centerVec;
     }
 
-    public void OnDrawGizmos()
-    {
-        Gizmos.color = Color.green;
-        Gizmos.DrawLine(transform.localPosition, transform.localPosition + transform.forward * value.feelerLength);
-        //Gizmos.DrawLine(transform.localPosition, transform.localPosition + (transform.forward + transform.right).normalized * value.feelerLength * 0.5f);
-        //Gizmos.DrawLine(transform.localPosition, transform.localPosition + (transform.forward - transform.right).normalized * value.feelerLength * 0.5f);
-        //Gizmos.DrawLine(transform.localPosition, transform.localPosition + (transform.forward + transform.up).normalized * value.feelerLength * 0.5f);
-        //Gizmos.DrawLine(transform.localPosition, transform.localPosition + (transform.forward - transform.up).normalized * value.feelerLength * 0.5f);
+    //public void OnDrawGizmos()
+    //{
+    //    Gizmos.color = Color.green;
+    //    Gizmos.DrawLine(transform.localPosition, transform.localPosition + transform.forward * value.feelerLength);
+    //    Gizmos.DrawLine(transform.localPosition, transform.localPosition + (transform.forward + transform.right).normalized * value.feelerLength * 0.5f);
+    //    Gizmos.DrawLine(transform.localPosition, transform.localPosition + (transform.forward - transform.right).normalized * value.feelerLength * 0.5f);
+    //    Gizmos.DrawLine(transform.localPosition, transform.localPosition + (transform.forward + transform.up).normalized * value.feelerLength * 0.5f);
+    //    Gizmos.DrawLine(transform.localPosition, transform.localPosition + (transform.forward - transform.up).normalized * value.feelerLength * 0.5f);
 
-        Gizmos.color = Color.white;
-        //Gizmos.DrawWireSphere(transform.position, value.searchDistance);
-        //Gizmos.DrawLine(transform.localPosition, transform.localPosition + Cohesion() * value.feelerLength);
-    }
+    //    Gizmos.color = Color.white;
+    //    Gizmos.DrawWireSphere(transform.position, value.searchDistance);
+    //    Gizmos.DrawLine(transform.localPosition, transform.localPosition + Cohesion() * value.feelerLength);
+    //}
 }

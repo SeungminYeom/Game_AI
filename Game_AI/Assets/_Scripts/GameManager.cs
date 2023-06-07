@@ -12,7 +12,6 @@ public class GameManager : MonoBehaviour
         public float    depth;
         public float    height;
 
-        public int      cubeSize;
         public float    spawnPosRange;
         public int      spawnRotRange;
         public int      spawnNumRange;

@@ -1,16 +1,23 @@
 {
-    "width" : 10,
-    "depth" : 10,
-    "height" : 10,
+    "width"                     : 50,
+    "depth"                     : 30,
+    "height"                    : 40,
 
-    "cubeSize" : 25,
-    "spawnPosRange" : 0.5,
-    "spawnRotRange" : 180,
-    "spawnNumRange" : 300,
 
-    "speed" : 3,
-    "wallAvoidenceSteeringForce" : 7,
-    "cohesionSteeringForce" : 2,
-    "feelerLength" : 5,
-    "searchDistance" : 10
+    "spawnPosRange"             : 0.4,
+    "spawnRotRange"             : 180,
+    "spawnNumRange"             : 1000,
+
+
+    "speed"                     : 5,
+
+
+    "avoidanceSteeringForce"    : 7,
+    "cohesionSteeringForce"     : 4,
+    "alignmentSteeringForce"    : 3,
+    "separationSteeringForce"   : 1,
+
+
+    "feelerLength"              : 10,
+    "searchDistance"            : 2
 }
