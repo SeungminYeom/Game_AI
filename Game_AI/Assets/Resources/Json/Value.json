@@ -1,15 +1,16 @@
 {
-    "width" : 100,
-    "depth" : 200,
-    "height" : 50,
+    "width" : 10,
+    "depth" : 10,
+    "height" : 10,
 
     "cubeSize" : 25,
     "spawnPosRange" : 0.5,
     "spawnRotRange" : 180,
-    "spawnNumRange" : 500,
+    "spawnNumRange" : 300,
 
-    "speed" : 10,
-    "steeringForce" : 7,
-    "feelerLength" : 20,
+    "speed" : 3,
+    "wallAvoidenceSteeringForce" : 7,
+    "cohesionSteeringForce" : 2,
+    "feelerLength" : 5,
     "searchDistance" : 10
 }

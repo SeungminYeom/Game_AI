@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEditor.Searcher;
 using UnityEngine;
 
 public class Movement : MonoBehaviour
@@ -9,7 +10,8 @@ public class Movement : MonoBehaviour
     class Value
     {
         public float speed;
-        public float steeringForce;
+        public float wallAvoidenceSteeringForce;
+        public float cohesionSteeringForce;
 
         public float feelerLength;
         public float searchDistance;
@@ -20,9 +22,14 @@ public class Movement : MonoBehaviour
 
     Rigidbody rigid;
 
+    List<Collider> colliders;
+
+    Coroutine search;
+
     Vector3 dirToLook;
     Vector3 wallAvoidenceVec;
-    [SerializeField] Vector3 cohesionVec;
+    Vector3 cohesionVec;
+    Vector3 alignmentVec;
 
     int wallMask;
     int fishMask;
@@ -35,15 +42,21 @@ public class Movement : MonoBehaviour
 
     void Start()
     {
+        colliders = new List<Collider>();
+
         wallMask = 1 << LayerMask.NameToLayer("Wall");
         fishMask = 1 << LayerMask.NameToLayer("Fish");
+
+        search = StartCoroutine(Search());
     }
 
     void Update()
     {
-        wallAvoidenceVec = WallAvoidence();
+        wallAvoidenceVec = WallAvoidence() * 0;
         cohesionVec = Cohesion();
-        dirToLook = wallAvoidenceVec + cohesionVec * 2f;
+        alignmentVec = Alignment();
+        //dirToLook = wallAvoidenceVec + cohesionVec + alignmentVec;
+        dirToLook = cohesionVec + alignmentVec;
         dirToLook = Vector3.Lerp(transform.forward, dirToLook, Time.deltaTime);
         //cohesionVec = Vector3.Lerp(transform.forward, cohesionVec, Time.deltaTime);
         //wallAvoidenceVec = Vector3.Lerp(transform.forward, wallAvoidenceVec, Time.deltaTime);
@@ -56,6 +69,29 @@ public class Movement : MonoBehaviour
     {
         Vector3 vec = transform.forward * value.speed;
         rigid.velocity = vec;
+    }
+
+    IEnumerator Search()
+    {
+        if (colliders.Count > 0)
+        {
+            colliders.Clear();
+        }
+
+        Collider[] hits = Physics.OverlapSphere(transform.localPosition, value.searchDistance, fishMask);
+
+        foreach (var hit in hits)
+        {
+            colliders.Add(hit);
+        }
+
+        //for (int i = 0; i < Mathf.Clamp(hits.Length, 1, 20); i++)
+        //{
+        //    colliders.Add(hits[i]);
+        //}
+
+        yield return new WaitForSeconds(Random.Range(0.1f, 0.5f));
+        search = StartCoroutine(Search());
     }
 
     Vector3 WallAvoidence()
@@ -99,7 +135,7 @@ public class Movement : MonoBehaviour
         if (proximateHit.collider != null)
         {
             //Vector3 steeringForce = proximateHit.normal * (feelerLength - proximateHit.distance) * value.steeringForce;
-            Vector3 steeringForce = proximateHit.normal * (feelerLength / proximateHit.distance) * value.steeringForce;
+            Vector3 steeringForce = proximateHit.normal * (feelerLength / proximateHit.distance) * value.wallAvoidenceSteeringForce;
             //steeringForce = Vector3.Lerp(transform.forward, steeringForce, Time.deltaTime);
             return steeringForce;
         }
@@ -110,12 +146,12 @@ public class Movement : MonoBehaviour
     // 주변 물고기의 중심 벡터로 이동
     Vector3 Cohesion()
     {
-        Collider[] hits = Physics.OverlapSphere(transform.localPosition, value.searchDistance, fishMask);
+        //Collider[] hits = Physics.OverlapSphere(transform.localPosition, value.searchDistance, fishMask);
         Vector3 centerVec = Vector3.zero;
 
-        if (hits.Length > 0)
+        if (colliders.Count > 0)
         {
-            foreach (var hit in hits)
+            foreach (var hit in colliders)
             {
                 centerVec += hit.transform.position;
             }
@@ -125,17 +161,62 @@ public class Movement : MonoBehaviour
             return centerVec;
         }
 
-        centerVec /= hits.Length;
+        centerVec /= colliders.Count;
+        centerVec -= transform.position;
+        centerVec.Normalize();
+
+        // SteeringForce가 speed와 같거나 근접할 때 제일 자연스러움. 따라서 같은 값을 사용하거나 speed값을 사용
+        return centerVec * value.cohesionSteeringForce;
+    }
+
+    // 주변 물고기의 Heading 벡터의 평균으로 회전
+    Vector3 Alignment()
+    {
+        //Collider[] hits = Physics.OverlapSphere(transform.localPosition, value.searchDistance, fishMask);
+        Vector3 centerVec = Vector3.zero;
+
+        if (colliders.Count > 0)
+        {
+            foreach (var hit in colliders)
+            {
+                centerVec += hit.transform.forward;
+            }
+        }
+        else
+        {
+            return centerVec;
+        }
+
+        centerVec /= colliders.Count;
         centerVec -= transform.position;
         centerVec.Normalize();
 
         return centerVec;
     }
 
-    // 주변 물고기의 Heading 벡터의 평균으로 회전
+    // 주변 물고기와 거리 벌리기 
+    Vector3 Separation()
+    {
+        Vector3 centerVec = Vector3.zero;
 
+        if (colliders.Count > 0)
+        {
+            foreach (var hit in colliders)
+            {
+                centerVec += hit.transform.forward;
+            }
+        }
+        else
+        {
+            return centerVec;
+        }
 
-    // 주변 물고기와 거리 벌리기
+        centerVec /= colliders.Count;
+        centerVec -= transform.position;
+        centerVec.Normalize();
+
+        return centerVec;
+    }
 
     public void OnDrawGizmos()
     {

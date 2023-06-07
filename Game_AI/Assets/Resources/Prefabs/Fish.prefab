@@ -94,7 +94,7 @@ SphereCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4689064590275374827}
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
   m_Radius: 0.06
@@ -132,7 +132,3 @@ MonoBehaviour:
     steeringForce: 0
     feelerLength: 0
     searchDistance: 0
-  cohesionVec: {x: 0, y: 0, z: 0}
-  fm:
-    serializedVersion: 2
-    m_Bits: 0
