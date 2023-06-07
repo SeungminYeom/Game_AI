@@ -8,14 +8,20 @@ public class GameManager : MonoBehaviour
     [System.Serializable]
     class Value
     {
+        public float    width;
+        public float    depth;
+        public float    height;
+
         public int      cubeSize;
-        public float    spawnPosition;
-        public int      spawnRotation;
+        public float    spawnPosRange;
+        public int      spawnRotRange;
         public int      spawnNumRange;
     }
 
     [SerializeField]
     Value value;
+
+    GameObject walls;
 
     void Awake()
     {
@@ -24,7 +30,10 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
-        StartCoroutine(CreateObj());
+        walls = GameObject.Find("Walls");
+
+        CreateAquarium();
+        SpawnFish();
     }
 
     void Update()
@@ -32,24 +41,39 @@ public class GameManager : MonoBehaviour
         
     }
 
-    IEnumerator CreateObj()
+    void CreateAquarium()
+    {
+        walls.transform.Find("Top").localPosition       = new Vector3(0, value.height * 0.5f, 0);
+        walls.transform.Find("Bottom").localPosition    = new Vector3(0, -value.height * 0.5f, 0);
+        walls.transform.Find("North").localPosition     = new Vector3(0, 0, value.depth * 0.5f);
+        walls.transform.Find("South").localPosition     = new Vector3(0, 0, -value.depth * 0.5f);
+        walls.transform.Find("East").localPosition      = new Vector3(value.width * 0.5f, 0, 0);
+        walls.transform.Find("West").localPosition      = new Vector3(-value.width * 0.5f, 0, 0);
+
+        walls.transform.Find("Top").localScale          = new Vector3(value.width * 0.1f, 1, value.depth * 0.1f);
+        walls.transform.Find("Bottom").localScale       = new Vector3(value.width * 0.1f, 1, value.depth * 0.1f);
+        walls.transform.Find("North").localScale        = new Vector3(value.width * 0.1f, 1, value.height * 0.1f);
+        walls.transform.Find("South").localScale        = new Vector3(value.width * 0.1f, 1, value.height * 0.1f);
+        walls.transform.Find("East").localScale         = new Vector3(value.height * 0.1f, 1, value.depth * 0.1f);
+        walls.transform.Find("West").localScale         = new Vector3(value.height * 0.1f, 1, value.depth * 0.1f);
+    }
+
+    void SpawnFish()
     {
         GameObject fish;
         GameObject fishList = GameObject.Find("FishList");
 
-        float range = value.cubeSize * value.spawnPosition;
         for (int i = 0; i < value.spawnNumRange; i++)
         {
-            Vector3 pos = new Vector3(Random.Range(-range, range),
-                                      Random.Range(-range, range),
-                                      Random.Range(-range, range));
-            Vector3 dir = new Vector3(Random.Range(-value.spawnRotation, value.spawnRotation),
-                                      Random.Range(-value.spawnRotation, value.spawnRotation),
+            Vector3 pos = new Vector3(Random.Range(-value.width * value.spawnPosRange, value.width * value.spawnPosRange),
+                                      Random.Range(-value.height * value.spawnPosRange, value.height * value.spawnPosRange),
+                                      Random.Range(-value.depth * value.spawnPosRange, value.depth * value.spawnPosRange));
+            Vector3 dir = new Vector3(Random.Range(-value.spawnRotRange, value.spawnRotRange),
+                                      Random.Range(-value.spawnRotRange, value.spawnRotRange),
                                       0);
 
             fish = Instantiate(Resources.Load("Prefabs/Fish"), pos, Quaternion.Euler(dir)) as GameObject;
             fish.transform.SetParent(fishList.transform);
         }
-        yield return null;
     }
 }

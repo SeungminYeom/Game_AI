@@ -1,7 +1,11 @@
 {
+    "width" : 100,
+    "depth" : 200,
+    "height" : 50,
+
     "cubeSize" : 25,
-    "spawnPosition" : 0.5,
-    "spawnRotation" : 180,
+    "spawnPosRange" : 0.5,
+    "spawnRotRange" : 180,
     "spawnNumRange" : 500,
 
     "speed" : 10,

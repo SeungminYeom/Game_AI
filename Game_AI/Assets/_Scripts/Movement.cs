@@ -43,9 +43,10 @@ public class Movement : MonoBehaviour
     {
         wallAvoidenceVec = WallAvoidence();
         cohesionVec = Cohesion();
-        dirToLook = wallAvoidenceVec + cohesionVec;
+        dirToLook = wallAvoidenceVec + cohesionVec * 2f;
         dirToLook = Vector3.Lerp(transform.forward, dirToLook, Time.deltaTime);
         //cohesionVec = Vector3.Lerp(transform.forward, cohesionVec, Time.deltaTime);
+        //wallAvoidenceVec = Vector3.Lerp(transform.forward, wallAvoidenceVec, Time.deltaTime);
         transform.localRotation = Quaternion.LookRotation(dirToLook);
         //transform.localRotation = Quaternion.LookRotation(cohesionVec);
         //transform.localRotation = Quaternion.LookRotation(wallAvoidenceVec);
@@ -97,7 +98,8 @@ public class Movement : MonoBehaviour
 
         if (proximateHit.collider != null)
         {
-            Vector3 steeringForce = proximateHit.normal * (feelerLength - proximateHit.distance) * value.steeringForce;
+            //Vector3 steeringForce = proximateHit.normal * (feelerLength - proximateHit.distance) * value.steeringForce;
+            Vector3 steeringForce = proximateHit.normal * (feelerLength / proximateHit.distance) * value.steeringForce;
             //steeringForce = Vector3.Lerp(transform.forward, steeringForce, Time.deltaTime);
             return steeringForce;
         }
