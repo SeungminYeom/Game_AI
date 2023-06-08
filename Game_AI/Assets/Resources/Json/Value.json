@@ -13,11 +13,11 @@
 
 
     "avoidanceSteeringForce"    : 7,
-    "cohesionSteeringForce"     : 4,
-    "alignmentSteeringForce"    : 3,
-    "separationSteeringForce"   : 1,
+    "cohesionSteeringForce"     : 2,
+    "alignmentSteeringForce"    : 1,
+    "separationSteeringForce"   : 0.3,
 
 
     "feelerLength"              : 10,
-    "searchDistance"            : 2
+    "searchDistance"            : 3
 }

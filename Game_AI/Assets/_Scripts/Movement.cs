@@ -36,7 +36,8 @@ public class Movement : MonoBehaviour
     Vector3 separationVec;
 
     int wallMask;
-    int fishMask;
+    int preyMask;
+    int PredatorMask;
 
     private void Awake()
     {
@@ -48,8 +49,9 @@ public class Movement : MonoBehaviour
     {
         collidersInSight = new List<Collider>();
 
-        wallMask = 1 << LayerMask.NameToLayer("Wall");
-        fishMask = 1 << LayerMask.NameToLayer("Fish");
+        wallMask        = 1 << LayerMask.NameToLayer("Wall");
+        preyMask        = 1 << LayerMask.NameToLayer("Prey");
+        PredatorMask    = 1 << LayerMask.NameToLayer("Predator");
 
         search = StartCoroutine(Search());
     }
@@ -77,12 +79,18 @@ public class Movement : MonoBehaviour
         if (collidersInSight.Count > 0)
             collidersInSight.Clear();
 
-        Collider[] hits = Physics.OverlapSphere(transform.localPosition, value.searchDistance, fishMask);
+        Collider[] hits = Physics.OverlapSphere(transform.localPosition, value.searchDistance, preyMask);
 
-        foreach (var hit in hits)
+        int hitsMax = Mathf.Clamp(hits.Length, 0, 30);
+
+        //foreach (var hit in hits)
+        for (int i = 0; i < hitsMax; i++)
         {
-            if (Vector3.Dot(hit.transform.position, transform.position) > 0.96f)
-                collidersInSight.Add(hit);
+            if (Vector3.Dot(hits[i].transform.position, transform.position) > 0.96f)
+                collidersInSight.Add(hits[i]);
+
+            //if (Vector3.Dot(hit.transform.position, transform.position) > 0.96f)
+            //    collidersInSight.Add(hit);
         }
 
         yield return new WaitForSeconds(Random.Range(0.3f, 0.7f));

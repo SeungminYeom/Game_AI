@@ -32,7 +32,8 @@ public class GameManager : MonoBehaviour
         walls = GameObject.Find("Walls");
 
         CreateAquarium();
-        SpawnFish();
+        SpawnPrey();
+        SpawnPredator();
     }
 
     void Update()
@@ -57,10 +58,10 @@ public class GameManager : MonoBehaviour
         walls.transform.Find("West").localScale         = new Vector3(value.height * 0.1f, 1, value.depth * 0.1f);
     }
 
-    void SpawnFish()
+    void SpawnPrey()
     {
-        GameObject fish;
-        GameObject fishList = GameObject.Find("FishList");
+        GameObject prey;
+        GameObject preyList = GameObject.Find("PreyList");
 
         for (int i = 0; i < value.spawnNumRange; i++)
         {
@@ -71,8 +72,25 @@ public class GameManager : MonoBehaviour
                                       Random.Range(-value.spawnRotRange, value.spawnRotRange),
                                       0);
 
-            fish = Instantiate(Resources.Load("Prefabs/Fish"), pos, Quaternion.Euler(dir)) as GameObject;
-            fish.transform.SetParent(fishList.transform);
+            prey = Instantiate(Resources.Load("Prefabs/Fish"), pos, Quaternion.Euler(dir)) as GameObject;
+            prey.transform.SetParent(preyList.transform);
+        }
+    }
+
+    void SpawnPredator()
+    {
+        GameObject predator;
+        GameObject predatorList = GameObject.Find("PredatorList");
+
+        for (int i = 0; i < 3; i++)
+        {
+            Vector3 pos = new Vector3(Random.Range(-value.width * value.spawnPosRange, value.width * value.spawnPosRange),
+                                      Random.Range(-value.height * value.spawnPosRange, value.height * value.spawnPosRange),
+                                      Random.Range(-value.depth * value.spawnPosRange, value.depth * value.spawnPosRange));
+
+            predator = Instantiate(Resources.Load("Prefabs/Penguin"), pos, Quaternion.identity) as GameObject;
+            predator.transform.LookAt(Vector3.zero);
+            predator.transform.SetParent(predatorList.transform);
         }
     }
 }
