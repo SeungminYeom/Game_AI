@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EvaderMovement : MonoBehaviour
+public class PredatorMovement : MonoBehaviour
 {
     [System.Serializable]
     class Value
