@@ -39,7 +39,7 @@ public class Movement : MonoBehaviour
 
     private void Awake()
     {
-        value = JsonUtility.FromJson<Value>(Resources.Load<TextAsset>("Json/Value").text);
+        value = JsonUtility.FromJson<Value>(Resources.Load<TextAsset>("Json/Prey").text);
         rigid = GetComponent<Rigidbody>();
     }
 
@@ -135,8 +135,8 @@ public class Movement : MonoBehaviour
 
         if (proximateHit.collider != null)
         {
-            //Vector3 steeringForce = proximateHit.normal * (feelerLength / proximateHit.distance) * value.avoidanceSteeringForce;
-            Vector3 steeringForce = proximateHit.normal * Mathf.Pow((feelerLength / proximateHit.distance), 2);
+            Vector3 steeringForce = proximateHit.normal * (feelerLength / proximateHit.distance) * value.avoidanceSteeringForce;
+            //Vector3 steeringForce = proximateHit.normal * (feelerLength * 2f / Mathf.Pow(proximateHit.distance, 2));
             return steeringForce;
         }
 

@@ -24,7 +24,7 @@ public class GameManager : MonoBehaviour
 
     void Awake()
     {
-        value = JsonUtility.FromJson<Value>(Resources.Load<TextAsset>("Json/Value").text);
+        value = JsonUtility.FromJson<Value>(Resources.Load<TextAsset>("Json/System").text);
     }
 
     void Start()

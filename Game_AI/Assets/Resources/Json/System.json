@@ -1,0 +1,10 @@
+{
+    "width"                     : 50,
+    "depth"                     : 30,
+    "height"                    : 40,
+
+
+    "spawnPosRange"             : 0.4,
+    "spawnRotRange"             : 180,
+    "spawnNumRange"             : 1000
+}
