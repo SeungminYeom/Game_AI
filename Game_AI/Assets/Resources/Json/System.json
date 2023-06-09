@@ -1,10 +1,11 @@
 {
     "width"                     : 50,
-    "depth"                     : 30,
-    "height"                    : 40,
+    "depth"                     : 50,
+    "height"                    : 50,
 
 
-    "spawnPosRange"             : 0.4,
+    "spawnPosRange"             : 0.3,
     "spawnRotRange"             : 180,
-    "spawnNumRange"             : 1000
+    "preySpawnAmount"           : 1000,
+    "predatorSpawnAmount"       : 3
 }

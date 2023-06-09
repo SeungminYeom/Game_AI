@@ -14,7 +14,8 @@ public class GameManager : MonoBehaviour
 
         public float    spawnPosRange;
         public int      spawnRotRange;
-        public int      spawnNumRange;
+        public int      preySpawnAmount;
+        public int      predatorSpawnAmount;
     }
 
     [SerializeField]
@@ -63,7 +64,7 @@ public class GameManager : MonoBehaviour
         GameObject prey;
         GameObject preyList = GameObject.Find("PreyList");
 
-        for (int i = 0; i < value.spawnNumRange; i++)
+        for (int i = 0; i < value.preySpawnAmount; i++)
         {
             Vector3 pos = new Vector3(Random.Range(-value.width * value.spawnPosRange, value.width * value.spawnPosRange),
                                       Random.Range(-value.height * value.spawnPosRange, value.height * value.spawnPosRange),
@@ -82,7 +83,7 @@ public class GameManager : MonoBehaviour
         GameObject predator;
         GameObject predatorList = GameObject.Find("PredatorList");
 
-        for (int i = 0; i < 3; i++)
+        for (int i = 0; i < value.predatorSpawnAmount; i++)
         {
             Vector3 pos = new Vector3(Random.Range(-value.width * value.spawnPosRange, value.width * value.spawnPosRange),
                                       Random.Range(-value.height * value.spawnPosRange, value.height * value.spawnPosRange),

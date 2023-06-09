@@ -13,9 +13,11 @@ public class Movement : MonoBehaviour
         public float cohesionSteeringForce;
         public float alignmentSteeringForce;
         public float separationSteeringForce;
+        public float fleeSteeringForce;
 
         public float feelerLength;
-        public float searchDistance;
+        public float searchRadius;
+        public float fleeRadius;
     }
 
     [SerializeField]
@@ -24,18 +26,20 @@ public class Movement : MonoBehaviour
     Rigidbody rigid;
 
     List<Collider> collidersInSight;
+    List<Collider> predatorInAround;
 
     Coroutine search;
 
     Vector3 dirToLook;
-    Vector3 avoidenceVec;
+    Vector3 avoidanceVec;
     Vector3 cohesionVec;
     Vector3 alignmentVec;
     Vector3 separationVec;
+    Vector3 FleeVec;
 
     int wallMask;
     int preyMask;
-    int PredatorMask;
+    int predatorMask;
 
     private void Awake()
     {
@@ -46,22 +50,27 @@ public class Movement : MonoBehaviour
     void Start()
     {
         collidersInSight = new List<Collider>();
+        predatorInAround = new List<Collider>();
 
         wallMask        = 1 << LayerMask.NameToLayer("Wall");
         preyMask        = 1 << LayerMask.NameToLayer("Prey");
-        PredatorMask    = 1 << LayerMask.NameToLayer("Predator");
+        predatorMask    = 1 << LayerMask.NameToLayer("Predator");
 
         search = StartCoroutine(Search());
     }
 
     void Update()
     {
-        avoidenceVec = Avoidence();
-        cohesionVec = Cohesion() * value.cohesionSteeringForce;
-        alignmentVec = Alignment() * value.alignmentSteeringForce;
-        separationVec = Separation() * value.separationSteeringForce;
+        avoidanceVec    = Avoidance();
+        cohesionVec     = Cohesion() * value.cohesionSteeringForce;
+        alignmentVec    = Alignment() * value.alignmentSteeringForce;
+        separationVec   = Separation() * value.separationSteeringForce;
+        FleeVec         = Flee() * value.fleeSteeringForce;
+    }
 
-        dirToLook = avoidenceVec + cohesionVec + alignmentVec + separationVec;
+    private void LateUpdate()
+    {
+        dirToLook = avoidanceVec + cohesionVec + alignmentVec + separationVec + FleeVec;
         dirToLook = Vector3.Lerp(transform.forward, dirToLook, Time.deltaTime);
         transform.localRotation = Quaternion.LookRotation(dirToLook);
     }
@@ -74,34 +83,34 @@ public class Movement : MonoBehaviour
 
     IEnumerator Search()
     {
-        if (collidersInSight.Count > 0)
-            collidersInSight.Clear();
+        if (collidersInSight.Count > 0) collidersInSight.Clear();
+        if (predatorInAround.Count > 0) predatorInAround.Clear();
 
-        Collider[] hits = Physics.OverlapSphere(transform.localPosition, value.searchDistance, preyMask);
+        Collider[] preyHits = Physics.OverlapSphere(transform.localPosition, value.searchRadius, preyMask);
+        Collider[] PredatorHits = Physics.OverlapSphere(transform.localPosition, value.fleeRadius, predatorMask);
 
-        int hitsMax = Mathf.Clamp(hits.Length, 0, 30);
-
-        //foreach (var hit in hits)
-        for (int i = 0; i < hitsMax; i++)
+        for (int i = 0; i < Mathf.Clamp(preyHits.Length, 0, 20); i++)
         {
-            if (Vector3.Dot(hits[i].transform.position, transform.position) > 0.96f)
-                collidersInSight.Add(hits[i]);
-
-            //if (Vector3.Dot(hit.transform.position, transform.position) > 0.96f)
-            //    collidersInSight.Add(hit);
+            if (Vector3.Dot(preyHits[i].transform.position, transform.position) > 0.96f)
+                collidersInSight.Add(preyHits[i]);
         }
 
-        yield return new WaitForSeconds(Random.Range(0.3f, 0.7f));
+        foreach (var hit in PredatorHits)
+        {
+            predatorInAround.Add(hit);
+        }
+
+        yield return new WaitForSeconds(Random.Range(0.5f, 1f));
         search = StartCoroutine(Search());
     }
 
-    Vector3 Avoidence()
+    Vector3 Avoidance()
     {
         RaycastHit[] hit = new RaycastHit[4];
-        RaycastHit proximateHit;
+        RaycastHit closeToHit;
         float feelerLength = value.feelerLength;
 
-        Physics.Raycast(transform.localPosition, transform.forward, out proximateHit, value.feelerLength, wallMask);
+        Physics.Raycast(transform.localPosition, transform.forward, out closeToHit, value.feelerLength, wallMask);
         Physics.Raycast(transform.localPosition, transform.forward + transform.right, out hit[0], value.feelerLength * 0.5f, wallMask);
         Physics.Raycast(transform.localPosition, transform.forward - transform.right, out hit[1], value.feelerLength * 0.5f, wallMask);
         Physics.Raycast(transform.localPosition, transform.forward + transform.up, out hit[2], value.feelerLength * 0.5f, wallMask);
@@ -111,10 +120,15 @@ public class Movement : MonoBehaviour
         for (int i = 0; i < hit.Length; i++)
         {
             if (hit[i].collider == null) continue;
-
-            if (proximateHit.distance > hit[i].distance)
+            if (closeToHit.collider == null)
             {
-                proximateHit = hit[i];
+                closeToHit = hit[i];
+                continue;
+            }
+
+            if ((closeToHit.transform.position - transform.position).sqrMagnitude > (hit[i].collider.transform.position - transform.position).sqrMagnitude)
+            {
+                closeToHit = hit[i];
                 feelerLength = value.feelerLength * 0.5f;
             }
         }
@@ -133,68 +147,66 @@ public class Movement : MonoBehaviour
         return hit.distance / value.feelerLength;
         */
 
-        if (proximateHit.collider != null)
+        if (closeToHit.collider == null)
         {
-            Vector3 steeringForce = proximateHit.normal * (feelerLength / proximateHit.distance) * value.avoidanceSteeringForce;
-            //Vector3 steeringForce = proximateHit.normal * (feelerLength * 2f / Mathf.Pow(proximateHit.distance, 2));
-            return steeringForce;
+            return transform.forward;
         }
 
-        return transform.forward;
+        return closeToHit.normal * (feelerLength / closeToHit.distance) * value.avoidanceSteeringForce;
     }
 
     // 주변 물고기의 중심 벡터로 이동
     Vector3 Cohesion()
     {
-        Vector3 centerVec = Vector3.zero;
+        Vector3 dirVec = Vector3.zero;
 
         if (collidersInSight.Count > 1)
         {
             foreach (var hit in collidersInSight)
             {
-                centerVec += hit.transform.position;
+                dirVec += hit.transform.position;
             }
         }
         else
         {
-            return centerVec;
+            return dirVec;
         }
 
-        centerVec /= collidersInSight.Count;
-        centerVec -= transform.position;
-        centerVec.Normalize();
+        dirVec /= collidersInSight.Count;
+        dirVec -= transform.position;
+        dirVec.Normalize();
 
-        return centerVec;
+        return dirVec;
     }
 
     // 주변 물고기의 Heading 벡터의 평균으로 회전
     Vector3 Alignment()
     {
-        Vector3 centerVec = Vector3.zero;
+        Vector3 dirVec = Vector3.zero;
 
         if (collidersInSight.Count > 1)
         {
             foreach (var hit in collidersInSight)
             {
-                centerVec += hit.transform.forward;
+                dirVec += hit.transform.forward;
             }
         }
         else
         {
-            return centerVec;
+            return dirVec;
         }
 
-        centerVec /= collidersInSight.Count;
-        centerVec -= transform.forward;
-        centerVec.Normalize();
+        dirVec /= collidersInSight.Count;
+        dirVec -= transform.forward;
+        dirVec.Normalize();
 
-        return centerVec;
+        return dirVec;
     }
 
     // 주변 물고기와 거리 벌리기 
     Vector3 Separation()
     {
-        Vector3 centerVec = Vector3.zero;
+        Vector3 dirVec = Vector3.zero;
 
         if (collidersInSight.Count > 1)
         {
@@ -203,15 +215,36 @@ public class Movement : MonoBehaviour
                 Vector3 toThisFish = transform.position - hit.transform.position;
                 if (toThisFish.magnitude < 0.0001f) continue;
 
-                centerVec += toThisFish.normalized / toThisFish.magnitude;
+                dirVec += toThisFish.normalized / toThisFish.magnitude;
             }
         }
         else
         {
-            return centerVec;
+            return dirVec;
         }
 
-        return centerVec;
+        return dirVec;
+    }
+
+    Vector3 Flee()
+    {
+        Vector3 dirVec = Vector3.zero;
+
+        if (predatorInAround == null) return dirVec;
+
+        foreach (var hit in predatorInAround)
+        {
+            Vector3 toThisFish = transform.position - hit.transform.position;
+            if (toThisFish.magnitude < 0.0001f) continue;
+
+            dirVec += toThisFish.normalized / toThisFish.magnitude;
+        }
+
+        //dirVec /= predatorInAround.Count;
+        //dirVec -= transform.position;
+        //dirVec.Normalize();
+
+        return dirVec;
     }
 
     //public void OnDrawGizmos()

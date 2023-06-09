@@ -29,7 +29,7 @@ public class PredatorMovement : MonoBehaviour
     Coroutine search;
 
     Vector3 dirToLook;
-    Vector3 avoidenceVec;
+    Vector3 avoidanceVec;
     Vector3 cohesionVec;
     Vector3 alignmentVec;
     Vector3 separationVec;
@@ -59,12 +59,12 @@ public class PredatorMovement : MonoBehaviour
 
     void Update()
     {
-        avoidenceVec = Avoidence();
+        avoidanceVec = Avoidance();
         //cohesionVec = Cohesion() * value.cohesionSteeringForce;
         //alignmentVec = Alignment() * value.alignmentSteeringForce;
         //separationVec = Separation() * value.separationSteeringForce;
 
-        dirToLook = avoidenceVec + cohesionVec + alignmentVec + separationVec;
+        dirToLook = avoidanceVec + cohesionVec + alignmentVec + separationVec;
         dirToLook = Vector3.Lerp(transform.forward, dirToLook, Time.deltaTime);
         transform.localRotation = Quaternion.LookRotation(dirToLook);
     }
@@ -98,7 +98,7 @@ public class PredatorMovement : MonoBehaviour
         search = StartCoroutine(Search());
     }
 
-    Vector3 Avoidence()
+    Vector3 Avoidance()
     {
         RaycastHit[] hit = new RaycastHit[4];
         RaycastHit proximateHit;
