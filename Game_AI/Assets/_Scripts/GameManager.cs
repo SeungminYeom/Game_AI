@@ -1,3 +1,4 @@
+using Cinemachine;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEditor.UI;
@@ -22,6 +23,9 @@ public class GameManager : MonoBehaviour
     Value value;
 
     GameObject walls;
+    [SerializeField]
+    List<GameObject> VC_Camera;
+    GameObject currentCamera;
 
     void Awake()
     {
@@ -30,7 +34,16 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
+        Cursor.lockState = CursorLockMode.Locked;
+
         walls = GameObject.Find("Walls");
+
+        VC_Camera.Add(GameObject.Find("VirtureCamera").transform.GetChild(0).gameObject);
+        VC_Camera.Add(GameObject.Find("VirtureCamera").transform.GetChild(1).gameObject);
+        VC_Camera.Add(GameObject.Find("VirtureCamera").transform.GetChild(2).gameObject);
+
+        currentCamera = VC_Camera[0];
+        currentCamera.GetComponent<CinemachineVirtualCameraBase>().Priority++;
 
         CreateAquarium();
         SpawnPrey();
@@ -39,7 +52,24 @@ public class GameManager : MonoBehaviour
 
     void Update()
     {
-        
+        if (Input.GetKeyDown(KeyCode.Alpha1))
+        {
+            currentCamera.GetComponent<CinemachineVirtualCameraBase>().Priority--;
+            currentCamera = VC_Camera[0];
+            currentCamera.GetComponent<CinemachineVirtualCameraBase>().Priority++;
+        }
+        else if (Input.GetKeyDown(KeyCode.Alpha2))
+        {
+            currentCamera.GetComponent<CinemachineVirtualCameraBase>().Priority--;
+            currentCamera = VC_Camera[1];
+            currentCamera.GetComponent<CinemachineVirtualCameraBase>().Priority++;
+        }
+        else if (Input.GetKeyDown(KeyCode.Alpha3))
+        {
+            currentCamera.GetComponent<CinemachineVirtualCameraBase>().Priority--;
+            currentCamera = VC_Camera[2];
+            currentCamera.GetComponent<CinemachineVirtualCameraBase>().Priority++;
+        }
     }
 
     void CreateAquarium()
