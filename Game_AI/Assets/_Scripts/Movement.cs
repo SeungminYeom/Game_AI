@@ -28,7 +28,8 @@ public class Movement : MonoBehaviour
     List<Collider> collidersInSight;
     List<Collider> predatorInAround;
 
-    Coroutine search;
+    Coroutine searchNeighbor;
+    Coroutine searchPredator;
 
     Vector3 dirToLook;
     Vector3 avoidanceVec;
@@ -56,7 +57,8 @@ public class Movement : MonoBehaviour
         preyMask        = 1 << LayerMask.NameToLayer("Prey");
         predatorMask    = 1 << LayerMask.NameToLayer("Predator");
 
-        search = StartCoroutine(Search());
+        searchNeighbor = StartCoroutine(SearchNeighbor());
+        searchPredator = StartCoroutine(SearchPredator());
     }
 
     void Update()
@@ -66,10 +68,7 @@ public class Movement : MonoBehaviour
         alignmentVec    = Alignment() * value.alignmentSteeringForce;
         separationVec   = Separation() * value.separationSteeringForce;
         FleeVec         = Flee() * value.fleeSteeringForce;
-    }
 
-    private void LateUpdate()
-    {
         dirToLook = avoidanceVec + cohesionVec + alignmentVec + separationVec + FleeVec;
         dirToLook = Vector3.Lerp(transform.forward, dirToLook, Time.deltaTime);
         transform.localRotation = Quaternion.LookRotation(dirToLook);
@@ -81,13 +80,11 @@ public class Movement : MonoBehaviour
         rigid.velocity = vec;
     }
 
-    IEnumerator Search()
+    IEnumerator SearchNeighbor()
     {
         if (collidersInSight.Count > 0) collidersInSight.Clear();
-        if (predatorInAround.Count > 0) predatorInAround.Clear();
 
         Collider[] preyHits = Physics.OverlapSphere(transform.localPosition, value.searchRadius, preyMask);
-        Collider[] PredatorHits = Physics.OverlapSphere(transform.localPosition, value.fleeRadius, predatorMask);
 
         for (int i = 0; i < Mathf.Clamp(preyHits.Length, 0, 20); i++)
         {
@@ -95,13 +92,23 @@ public class Movement : MonoBehaviour
                 collidersInSight.Add(preyHits[i]);
         }
 
-        foreach (var hit in PredatorHits)
+        yield return new WaitForSeconds(Random.Range(0.4f, 0.8f));
+        searchNeighbor = StartCoroutine(SearchNeighbor());
+    }
+    IEnumerator SearchPredator()
+    {
+        if (predatorInAround.Count > 0) predatorInAround.Clear();
+
+        Collider[] predatorHits = Physics.OverlapSphere(transform.localPosition, value.fleeRadius, predatorMask);
+
+        foreach (var hit in predatorHits)
         {
             predatorInAround.Add(hit);
         }
 
-        yield return new WaitForSeconds(Random.Range(0.5f, 1f));
-        search = StartCoroutine(Search());
+        //yield return new WaitForSeconds(Random.Range(0.4f, 0.8f));
+        yield return new WaitForSeconds(0.1f);
+        searchNeighbor = StartCoroutine(SearchPredator());
     }
 
     Vector3 Avoidance()
@@ -240,21 +247,18 @@ public class Movement : MonoBehaviour
             dirVec += toThisFish.normalized / toThisFish.magnitude;
         }
 
-        //dirVec /= predatorInAround.Count;
-        //dirVec -= transform.position;
-        //dirVec.Normalize();
-
         return dirVec;
     }
 
     //public void OnDrawGizmos()
     //{
-    //    Gizmos.color = Color.green;
-    //    Gizmos.DrawLine(transform.localPosition, transform.localPosition + transform.forward * value.feelerLength);
-    //    Gizmos.DrawLine(transform.localPosition, transform.localPosition + (transform.forward + transform.right).normalized * value.feelerLength * 0.5f);
-    //    Gizmos.DrawLine(transform.localPosition, transform.localPosition + (transform.forward - transform.right).normalized * value.feelerLength * 0.5f);
-    //    Gizmos.DrawLine(transform.localPosition, transform.localPosition + (transform.forward + transform.up).normalized * value.feelerLength * 0.5f);
-    //    Gizmos.DrawLine(transform.localPosition, transform.localPosition + (transform.forward - transform.up).normalized * value.feelerLength * 0.5f);
+        //Gizmos.color = Color.green;
+        //    Gizmos.DrawLine(transform.localPosition, transform.localPosition + transform.forward * value.feelerLength);
+        //    Gizmos.DrawLine(transform.localPosition, transform.localPosition + (transform.forward + transform.right).normalized * value.feelerLength * 0.5f);
+        //    Gizmos.DrawLine(transform.localPosition, transform.localPosition + (transform.forward - transform.right).normalized * value.feelerLength * 0.5f);
+        //    Gizmos.DrawLine(transform.localPosition, transform.localPosition + (transform.forward + transform.up).normalized * value.feelerLength * 0.5f);
+        //    Gizmos.DrawLine(transform.localPosition, transform.localPosition + (transform.forward - transform.up).normalized * value.feelerLength * 0.5f);
+        //Gizmos.DrawLine(transform.localPosition, transform.localPosition + FleeVec);
 
     //    Gizmos.color = Color.white;
     //    Gizmos.DrawWireSphere(transform.position, value.searchDistance);

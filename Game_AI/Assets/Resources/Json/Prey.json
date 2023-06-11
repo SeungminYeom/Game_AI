@@ -4,9 +4,9 @@
 
     "avoidanceSteeringForce"    : 10,
     "cohesionSteeringForce"     : 4,
-    "alignmentSteeringForce"    : 6,
-    "separationSteeringForce"   : 1,
-    "fleeSteeringForce"         : 5,
+    "alignmentSteeringForce"    : 8,
+    "separationSteeringForce"   : 2,
+    "fleeSteeringForce"         : 150,
 
 
     "feelerLength"              : 15,

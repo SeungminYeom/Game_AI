@@ -43,7 +43,7 @@ MeshFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4689064590275374827}
-  m_Mesh: {fileID: -5495902117074765545, guid: 6204840c9c79de44f93cb1fa85750a45, type: 3}
+  m_Mesh: {fileID: -5562174910977015433, guid: 88c63e948231cf846b9e4242fffbc245, type: 3}
 --- !u!23 &6490279796555534142
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -97,7 +97,7 @@ SphereCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.06
+  m_Radius: 0.3
   m_Center: {x: 0, y: 0.005110882, z: -0.04}
 --- !u!54 &7552693468992018150
 Rigidbody:
@@ -129,6 +129,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   value:
     speed: 0
-    steeringForce: 0
+    avoidanceSteeringForce: 0
+    cohesionSteeringForce: 0
+    alignmentSteeringForce: 0
+    separationSteeringForce: 0
+    fleeSteeringForce: 0
     feelerLength: 0
-    searchDistance: 0
+    searchRadius: 0
+    fleeRadius: 0
