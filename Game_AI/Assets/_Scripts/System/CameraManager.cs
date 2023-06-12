@@ -8,7 +8,6 @@ public class CameraManager : MonoBehaviour
     [SerializeField]
     List<GameObject> VC_Camera;
     GameObject currentCamera;
-    GameObject previousCamera;
     GameObject target;
 
     bool lockFlag;
@@ -59,7 +58,6 @@ public class CameraManager : MonoBehaviour
         {
             if (currentCamera == VC_Camera[2])
             {
-                //previousCamera = currentCamera;
                 currentCamera.GetComponent<CinemachineVirtualCameraBase>().LookAt = null;
                 currentCamera.GetComponent<CinemachineVirtualCameraBase>().Follow = null;
             }
@@ -68,7 +66,6 @@ public class CameraManager : MonoBehaviour
         {
             if (currentCamera == VC_Camera[2])
             {
-                //currentCamera = previousCamera;
                 currentCamera.GetComponent<CinemachineVirtualCameraBase>().LookAt = target.transform;
                 currentCamera.GetComponent<CinemachineVirtualCameraBase>().Follow = target.transform;
             }

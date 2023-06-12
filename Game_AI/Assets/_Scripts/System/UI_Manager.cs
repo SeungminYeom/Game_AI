@@ -8,14 +8,25 @@ public class UI_Manager : MonoBehaviour
     GameObject canvas;
     GameObject menu;
 
+    GameObject idle;
+    GameObject spawnMenu;
+    //GameObject value;
+    //GameObject spawn;
+    //GameObject clear;
+    //GameObject original;
+    //GameObject optimized;
+    //GameObject back;
+
     CameraManager cameraManager;
 
     void Start()
     {
         cameraManager = GameObject.Find("CameraManager").GetComponent<CameraManager>();
 
-        canvas = GameObject.Find("Canvas");
-        menu = canvas.transform.GetChild(0).gameObject;
+        canvas      = GameObject.Find("Canvas");
+        menu        = canvas.transform.GetChild(0).gameObject;
+        idle        = menu.transform.GetChild(1).gameObject;
+        spawnMenu   = menu.transform.GetChild(2).gameObject;
     }
 
     void Update()
@@ -36,7 +47,8 @@ public class UI_Manager : MonoBehaviour
             }
             else
             {
-                //tap.SetActive(true);
+                idle.SetActive(true);
+                spawnMenu.SetActive(false);
                 menu.SetActive(false);
 
                 Cursor.lockState = CursorLockMode.Locked;
@@ -52,5 +64,37 @@ public class UI_Manager : MonoBehaviour
     public void ExitProgram()
     {
         Application.Quit();
+    }
+
+    public void ClickedValue()
+    {
+        idle.SetActive(false);
+    }
+
+    public void ClickedSpawn()
+    {
+        idle.SetActive(false);
+        spawnMenu.SetActive(true);
+    }
+
+    public void ClickedOriginal()
+    {
+
+    }
+
+    public void ClickedOptimized()
+    {
+
+    }
+
+    public void ClickedBack()
+    {
+        spawnMenu.SetActive(false);
+        idle.SetActive(true);
+    }
+
+    public void ClickedClear()
+    {
+
     }
 }
