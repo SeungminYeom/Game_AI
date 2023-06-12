@@ -22,12 +22,11 @@ public class GameManager : MonoBehaviour
     Value value;
 
     GameObject walls;
-    [SerializeField]
-    List<GameObject> VC_Camera;
-    GameObject currentCamera;
 
     void Awake()
     {
+        Screen.SetResolution(1920, 1080, true);
+
         value = JsonUtility.FromJson<Value>(Resources.Load<TextAsset>("Json/System").text);
     }
 
@@ -37,13 +36,6 @@ public class GameManager : MonoBehaviour
 
         walls = GameObject.Find("Walls");
 
-        VC_Camera.Add(GameObject.Find("VirtureCamera").transform.GetChild(0).gameObject);
-        VC_Camera.Add(GameObject.Find("VirtureCamera").transform.GetChild(1).gameObject);
-        VC_Camera.Add(GameObject.Find("VirtureCamera").transform.GetChild(2).gameObject);
-
-        currentCamera = VC_Camera[0];
-        currentCamera.GetComponent<CinemachineVirtualCameraBase>().Priority++;
-
         CreateAquarium();
         SpawnPrey();
         SpawnPredator();
@@ -51,24 +43,6 @@ public class GameManager : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Alpha1))
-        {
-            currentCamera.GetComponent<CinemachineVirtualCameraBase>().Priority--;
-            currentCamera = VC_Camera[0];
-            currentCamera.GetComponent<CinemachineVirtualCameraBase>().Priority++;
-        }
-        else if (Input.GetKeyDown(KeyCode.Alpha2))
-        {
-            currentCamera.GetComponent<CinemachineVirtualCameraBase>().Priority--;
-            currentCamera = VC_Camera[1];
-            currentCamera.GetComponent<CinemachineVirtualCameraBase>().Priority++;
-        }
-        else if (Input.GetKeyDown(KeyCode.Alpha3))
-        {
-            currentCamera.GetComponent<CinemachineVirtualCameraBase>().Priority--;
-            currentCamera = VC_Camera[2];
-            currentCamera.GetComponent<CinemachineVirtualCameraBase>().Priority++;
-        }
     }
 
     void CreateAquarium()

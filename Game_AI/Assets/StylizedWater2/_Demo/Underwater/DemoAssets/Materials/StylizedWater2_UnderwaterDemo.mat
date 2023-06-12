@@ -148,7 +148,7 @@ Material:
     - _FoamSize: 0.385
     - _FoamSpeed: 0.020000014
     - _FoamTiling: 0.39999992
-    - _FoamWaveMask: 0.106
+    - _FoamWaveMask: 0.136
     - _FoamWaveMaskExp: 7.01
     - _GlossMapScale: 0
     - _Glossiness: 0
