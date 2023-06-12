@@ -10,6 +10,6 @@
 
 
     "feelerLength"              : 15,
-    "searchRadius"              : 3,
+    "searchRadius"              : 6,
     "fleeRadius"                : 15
 }

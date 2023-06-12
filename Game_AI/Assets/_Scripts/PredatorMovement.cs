@@ -54,13 +54,13 @@ public class PredatorMovement : MonoBehaviour
         preyMask        = 1 << LayerMask.NameToLayer("Prey");
         predatorMask    = 1 << LayerMask.NameToLayer("Predator");
 
-        //search = StartCoroutine(Search());
+        search = StartCoroutine(Search());
     }
 
     void Update()
     {
         avoidanceVec = Avoidance();
-        //cohesionVec = Cohesion() * value.cohesionSteeringForce;
+        cohesionVec = Cohesion() * value.cohesionSteeringForce;
         //alignmentVec = Alignment() * value.alignmentSteeringForce;
         //separationVec = Separation() * value.separationSteeringForce;
 
@@ -82,19 +82,19 @@ public class PredatorMovement : MonoBehaviour
 
         Collider[] hits = Physics.OverlapSphere(transform.localPosition, value.searchDistance, preyMask);
 
-        int hitsMax = Mathf.Clamp(hits.Length, 0, 30);
+        int hitsMax = Mathf.Clamp(hits.Length, 0, 20);
 
         //foreach (var hit in hits)
         for (int i = 0; i < hitsMax; i++)
         {
-            if (Vector3.Dot(hits[i].transform.position, transform.position) > 0.96f)
+            if (Vector3.Dot(hits[i].transform.position, transform.position) > 0)
                 collidersInSight.Add(hits[i]);
 
             //if (Vector3.Dot(hit.transform.position, transform.position) > 0.96f)
             //    collidersInSight.Add(hit);
         }
 
-        yield return new WaitForSeconds(Random.Range(0.3f, 0.7f));
+        yield return new WaitForSeconds(Random.Range(0.8f, 1.6f));
         search = StartCoroutine(Search());
     }
 

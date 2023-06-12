@@ -95,6 +95,7 @@ public class Movement : MonoBehaviour
         yield return new WaitForSeconds(Random.Range(0.4f, 0.8f));
         searchNeighbor = StartCoroutine(SearchNeighbor());
     }
+
     IEnumerator SearchPredator()
     {
         if (predatorInAround.Count > 0) predatorInAround.Clear();
@@ -106,7 +107,6 @@ public class Movement : MonoBehaviour
             predatorInAround.Add(hit);
         }
 
-        //yield return new WaitForSeconds(Random.Range(0.4f, 0.8f));
         yield return new WaitForSeconds(0.1f);
         searchNeighbor = StartCoroutine(SearchPredator());
     }
@@ -139,20 +139,6 @@ public class Movement : MonoBehaviour
                 feelerLength = value.feelerLength * 0.5f;
             }
         }
-
-        /* 감속 코드
-        if (hit.collider == null)
-        {
-            return 1.0f;
-        }
-
-        if (hit.distance / value.feelerLength < 0.3f)
-        {
-            return 0.0f;
-        }
-
-        return hit.distance / value.feelerLength;
-        */
 
         if (closeToHit.collider == null)
         {

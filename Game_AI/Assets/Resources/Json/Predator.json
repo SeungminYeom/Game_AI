@@ -1,13 +1,13 @@
 {
-    "speed"                 : 15,
+    "speed"                 : 20,
 
 
     "avoidanceSteeringForce"    : 7,
-    "cohesionSteeringForce"     : 2,
+    "cohesionSteeringForce"     : 3,
     "alignmentSteeringForce"    : 1,
     "separationSteeringForce"   : 0.3,
 
 
     "feelerLength"              : 15,
-    "searchDistance"            : 3
+    "searchDistance"            : 15
 }
