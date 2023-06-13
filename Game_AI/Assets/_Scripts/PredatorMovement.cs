@@ -11,11 +11,9 @@ public class PredatorMovement : Movement
 
         public float avoidanceSteeringForce;
         public float cohesionSteeringForce;
-        public float alignmentSteeringForce;
-        public float separationSteeringForce;
 
         public float feelerLength;
-        public float searchDistance;
+        public float searchRadius;
     }
 
     [SerializeField]
@@ -23,11 +21,14 @@ public class PredatorMovement : Movement
 
     Coroutine search;
 
-    //float decelerationRate;
-
     private void Awake()
     {
-        value = JsonUtility.FromJson<Value>(Resources.Load<TextAsset>("Json/Predator").text);
+        List<float> list = GameObject.Find("GameManager").GetComponent<GameManager>().GetPredatorValue();
+        value.speed                     = list[0];
+        value.avoidanceSteeringForce    = list[1];
+        value.cohesionSteeringForce     = list[2];
+        value.feelerLength              = list[3];
+        value.searchRadius              = list[4];
     }
 
     new void Start()
@@ -44,14 +45,13 @@ public class PredatorMovement : Movement
         wallAvoidVec = WallAvoid(value.feelerLength) * value.avoidanceSteeringForce;
         cohesionVec = Cohesion() * value.cohesionSteeringForce;
 
-        dirToLook = wallAvoidVec + cohesionVec + alignmentVec + separationVec;
+        dirToLook = wallAvoidVec + cohesionVec + Revolution(50);
         dirToLook = Vector3.Lerp(transform.forward, dirToLook, Time.deltaTime);
         transform.localRotation = Quaternion.LookRotation(dirToLook);
     }
 
     private void FixedUpdate()
     {
-        //Vector3 vec = transform.forward * value.speed * decelerationRate;
         Vector3 vec = transform.forward * value.speed;
         rigid.velocity = vec;
     }
@@ -61,12 +61,12 @@ public class PredatorMovement : Movement
         if (objInSight.Count > 0)
             objInSight.Clear();
 
-        Collider[] preyHits = Physics.OverlapSphere(transform.localPosition, value.searchDistance, preyMask);
+        Collider[] preyHits = Physics.OverlapSphere(transform.localPosition, value.searchRadius, preyMask);
 
         for (int i = 0; i < Mathf.Clamp(preyHits.Length, 0, 20); i++)
         {
             if (Vector3.Dot(preyHits[i].transform.position, transform.position) > 0)
-                objInSight.Add(preyHits[i]);
+                objInSight.Add(preyHits[i].gameObject);
         }
 
         yield return new WaitForSeconds(Random.Range(0.8f, 1.6f));

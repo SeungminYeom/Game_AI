@@ -16,8 +16,9 @@ public class UI_Manager : MonoBehaviour
         public string value;
         public string spawn;
         public string clear;
-        public string original;
-        public string optimized;
+        public string prey;
+        public string predator;
+        public string save;
         public string back;
     };
 
@@ -27,7 +28,9 @@ public class UI_Manager : MonoBehaviour
     GameObject canvas;
     GameObject menu;
     GameObject idle;
-    GameObject spawnMenu;
+    GameObject valueMenu;
+    GameObject preyMenu;
+    GameObject predatorMenu;
     GameObject cameraName;
     GameObject comment;
 
@@ -53,8 +56,10 @@ public class UI_Manager : MonoBehaviour
         menu            = canvas.transform.GetChild(0).gameObject;
         cameraName      = canvas.transform.GetChild(1).gameObject;
         idle            = menu.transform.GetChild(1).gameObject;
-        spawnMenu       = menu.transform.GetChild(2).gameObject;
-        comment         = menu.transform.GetChild(3).gameObject;
+        valueMenu       = menu.transform.GetChild(2).gameObject;
+        preyMenu        = menu.transform.GetChild(3).gameObject;
+        predatorMenu    = menu.transform.GetChild(4).gameObject;
+        comment         = menu.transform.GetChild(5).gameObject;
 
         raycast = canvas.GetComponent<GraphicRaycaster>();
         eventSystem = GameObject.Find("EventSystem").GetComponent<EventSystem>();
@@ -77,7 +82,9 @@ public class UI_Manager : MonoBehaviour
             else
             {
                 idle.SetActive(true);
-                spawnMenu.SetActive(false);
+                valueMenu.SetActive(false);
+                preyMenu.SetActive(false);
+                predatorMenu.SetActive(false);
                 menu.SetActive(false);
                 cameraManager.FixedCamera(false);
 
@@ -101,10 +108,7 @@ public class UI_Manager : MonoBehaviour
             string str = "";
             if (results.Count > 0)
             {
-                if (commentDict.ContainsKey(results[0].gameObject.name))
-                {
-                    commentDict.TryGetValue(results[0].gameObject.name, out str);
-                }
+                commentDict.TryGetValue(results[0].gameObject.name, out str);
             }
 
             if (str != "")
@@ -135,33 +139,121 @@ public class UI_Manager : MonoBehaviour
     public void ClickedValue()
     {
         idle.SetActive(false);
+        valueMenu.SetActive(true);
     }
 
-    public void ClickedSpawn()
+    public void ClickedPrey()
     {
-        idle.SetActive(false);
-        spawnMenu.SetActive(true);
+        valueMenu.SetActive(false);
+        preyMenu.SetActive(true);
+
+        List<float> values = GameObject.Find("GameManager").GetComponent<GameManager>().GetValue("Prey");
+
+        //Speed
+        preyMenu.transform.GetChild(0).GetChild(0).GetComponent<TMP_InputField>().text = values[0].ToString();
+        //Avoidance
+        preyMenu.transform.GetChild(1).GetChild(0).GetComponent<TMP_InputField>().text = values[1].ToString();
+        //Cohesion
+        preyMenu.transform.GetChild(2).GetChild(0).GetComponent<TMP_InputField>().text = values[2].ToString();
+        //Separation
+        preyMenu.transform.GetChild(3).GetChild(0).GetComponent<TMP_InputField>().text = values[3].ToString();
+        //Alignment
+        preyMenu.transform.GetChild(4).GetChild(0).GetComponent<TMP_InputField>().text = values[4].ToString();
+        //Flee
+        preyMenu.transform.GetChild(5).GetChild(0).GetComponent<TMP_InputField>().text = values[5].ToString();
+        //SearchRadius
+        preyMenu.transform.GetChild(6).GetChild(0).GetComponent<TMP_InputField>().text = values[6].ToString();
+        //FleeRadius
+        preyMenu.transform.GetChild(7).GetChild(0).GetComponent<TMP_InputField>().text = values[7].ToString();
+        //SpawnAmount
+        preyMenu.transform.GetChild(8).GetChild(0).GetComponent<TMP_InputField>().text = values[8].ToString();
     }
 
-    public void ClickedOriginal()
+    public void ClickedPredator()
     {
+        valueMenu.SetActive(false);
+        predatorMenu.SetActive(true);
 
+        List<float> values = GameObject.Find("GameManager").GetComponent<GameManager>().GetValue("Predator");
+
+        //Speed
+        predatorMenu.transform.GetChild(0).GetChild(0).GetComponent<TMP_InputField>().text = values[0].ToString();
+        //Avoidance
+        predatorMenu.transform.GetChild(1).GetChild(0).GetComponent<TMP_InputField>().text = values[1].ToString();
+        //Cohesion
+        predatorMenu.transform.GetChild(2).GetChild(0).GetComponent<TMP_InputField>().text = values[2].ToString();
+        //SearchRadius
+        predatorMenu.transform.GetChild(3).GetChild(0).GetComponent<TMP_InputField>().text = values[3].ToString();
+        //SpawnAmount
+        predatorMenu.transform.GetChild(4).GetChild(0).GetComponent<TMP_InputField>().text = values[4].ToString();
     }
 
-    public void ClickedOptimized()
+    public void ClickedBack(GameObject currentUI)
     {
-
+        if (currentUI == preyMenu)
+        {
+            preyMenu.SetActive(false);
+            valueMenu.SetActive(true);
+        }
+        else if (currentUI == predatorMenu)
+        {
+            predatorMenu.SetActive(false);
+            valueMenu.SetActive(true);
+        }
+        else if (currentUI == valueMenu)
+        {
+            valueMenu.SetActive(false);
+            idle.SetActive(true);
+        }
     }
 
-    public void ClickedBack()
+    public void ClickedSave(GameObject currentUI)
     {
-        spawnMenu.SetActive(false);
-        idle.SetActive(true);
-    }
+        List<float> list = new List<float>();
 
-    public void ClickedClear()
-    {
+        if (currentUI == preyMenu)
+        {
+            //Speed
+            list.Add(float.Parse(preyMenu.transform.GetChild(0).GetChild(0).GetComponent<TMP_InputField>().text));
+            //Avoidance
+            list.Add(float.Parse(preyMenu.transform.GetChild(1).GetChild(0).GetComponent<TMP_InputField>().text));
+            //Cohesion
+            list.Add(float.Parse(preyMenu.transform.GetChild(2).GetChild(0).GetComponent<TMP_InputField>().text));
+            //Separation
+            list.Add(float.Parse(preyMenu.transform.GetChild(3).GetChild(0).GetComponent<TMP_InputField>().text));
+            //Alignment
+            list.Add(float.Parse(preyMenu.transform.GetChild(4).GetChild(0).GetComponent<TMP_InputField>().text));
+            //Flee
+            list.Add(float.Parse(preyMenu.transform.GetChild(5).GetChild(0).GetComponent<TMP_InputField>().text));
+            //SearchRadius
+            list.Add(float.Parse(preyMenu.transform.GetChild(6).GetChild(0).GetComponent<TMP_InputField>().text));
+            //FleeRadius
+            list.Add(float.Parse(preyMenu.transform.GetChild(7).GetChild(0).GetComponent<TMP_InputField>().text));
+            //SpawnAmount
+            list.Add(float.Parse(preyMenu.transform.GetChild(8).GetChild(0).GetComponent<TMP_InputField>().text));
 
+            GameObject.Find("GameManager").GetComponent<GameManager>().SetValue(list, "Prey");
+            preyMenu.SetActive(false);
+        }
+        else if (currentUI == predatorMenu)
+        {
+            //Speed
+            list.Add(float.Parse(predatorMenu.transform.GetChild(0).GetChild(0).GetComponent<TMP_InputField>().text));
+            //Avoidance
+            list.Add(float.Parse(predatorMenu.transform.GetChild(1).GetChild(0).GetComponent<TMP_InputField>().text));
+            //Cohesion
+            list.Add(float.Parse(predatorMenu.transform.GetChild(2).GetChild(0).GetComponent<TMP_InputField>().text));
+            //SearchRadius
+            list.Add(float.Parse(predatorMenu.transform.GetChild(3).GetChild(0).GetComponent<TMP_InputField>().text));
+            //SpawnAmount
+            list.Add(float.Parse(predatorMenu.transform.GetChild(4).GetChild(0).GetComponent<TMP_InputField>().text));
+
+            GameObject.Find("GameManager").GetComponent<GameManager>().SetValue(list, "Predator");
+            predatorMenu.SetActive(false);
+        }
+
+
+        valueMenu.SetActive(true);
     }
 
     void CreateDictionary()
@@ -169,8 +261,9 @@ public class UI_Manager : MonoBehaviour
         commentDict.Add("Value", commentString.value);
         commentDict.Add("Spawn", commentString.spawn);
         commentDict.Add("Clear", commentString.clear);
-        commentDict.Add("Original", commentString.original);
-        commentDict.Add("Optimized", commentString.optimized);
+        commentDict.Add("Prey", commentString.prey);
+        commentDict.Add("Predator", commentString.predator);
+        commentDict.Add("Save", commentString.save);
         commentDict.Add("Back", commentString.back);
     }
 }

@@ -1,13 +1,17 @@
+using StylizedWater2;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class Movement : MonoBehaviour
 {
-    protected List<Collider> objInSight;
+    protected List<GameObject> objInSight;
+
+    protected GameObject center;
 
     protected Rigidbody rigid;
 
+    protected int waterMask;
     protected int wallMask;
     protected int preyMask;
     protected int predatorMask;
@@ -18,19 +22,21 @@ public class Movement : MonoBehaviour
     protected Vector3 cohesionVec;
     protected Vector3 alignmentVec;
     protected Vector3 separationVec;
-    protected Vector3 FleeVec;
+    protected Vector3 fleeVec;
 
     protected void Start()
     {
-        objInSight = new List<Collider>();
+        objInSight = new List<GameObject>();
+        center = GameObject.Find("Center");
 
+        waterMask       = 1 << LayerMask.NameToLayer("Water");
         wallMask        = 1 << LayerMask.NameToLayer("Wall");
         preyMask        = 1 << LayerMask.NameToLayer("Prey");
         predatorMask    = 1 << LayerMask.NameToLayer("Predator");
     }
 
     // 달아나기
-    protected Vector3 Flee(List<Collider> colliders)
+    protected Vector3 Flee(List<GameObject> colliders)
     {
         Vector3 dirVec = Vector3.zero;
 
@@ -53,11 +59,11 @@ public class Movement : MonoBehaviour
         RaycastHit[] hit = new RaycastHit[4];
         RaycastHit closeToHit;
 
-        Physics.Raycast(transform.localPosition, transform.forward, out closeToHit, feelerLength * 2, wallMask);
-        Physics.Raycast(transform.localPosition, transform.forward + transform.right, out hit[0], feelerLength, wallMask);
-        Physics.Raycast(transform.localPosition, transform.forward - transform.right, out hit[1], feelerLength, wallMask);
-        Physics.Raycast(transform.localPosition, transform.forward + transform.up, out hit[2], feelerLength, wallMask);
-        Physics.Raycast(transform.localPosition, transform.forward - transform.up, out hit[3], feelerLength, wallMask);
+        Physics.Raycast(transform.localPosition, transform.forward, out closeToHit, feelerLength * 2, waterMask);
+        Physics.Raycast(transform.localPosition, transform.forward + transform.right, out hit[0], feelerLength, waterMask);
+        Physics.Raycast(transform.localPosition, transform.forward - transform.right, out hit[1], feelerLength, waterMask);
+        Physics.Raycast(transform.localPosition, transform.forward + transform.up, out hit[2], feelerLength, waterMask);
+        Physics.Raycast(transform.localPosition, transform.forward - transform.up, out hit[3], feelerLength, waterMask);
 
         // 가장 가까운 hit 찾기
         for (int i = 0; i < hit.Length; i++)
@@ -88,7 +94,7 @@ public class Movement : MonoBehaviour
     {
         Vector3 dirVec = Vector3.zero;
 
-        if (objInSight.Count > 1)
+        if (objInSight.Count > 0)
         {
             foreach (var hit in objInSight)
             {
@@ -112,7 +118,7 @@ public class Movement : MonoBehaviour
     {
         Vector3 dirVec = Vector3.zero;
 
-        if (objInSight.Count > 1)
+        if (objInSight.Count > 0)
         {
             foreach (var hit in objInSight)
             {
@@ -136,7 +142,7 @@ public class Movement : MonoBehaviour
     {
         Vector3 dirVec = Vector3.zero;
 
-        if (objInSight.Count > 1)
+        if (objInSight.Count > 0)
         {
             foreach (var hit in objInSight)
             {
@@ -150,6 +156,14 @@ public class Movement : MonoBehaviour
         {
             return dirVec;
         }
+
+        return dirVec;
+    }
+
+    protected Vector3 Revolution(float distance)
+    {
+        Vector3 dirVec = center.transform.position - transform.position;
+        dirVec = dirVec.normalized * Mathf.Pow((dirVec.magnitude / distance), 2);
 
         return dirVec;
     }

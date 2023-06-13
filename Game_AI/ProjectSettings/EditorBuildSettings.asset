@@ -12,6 +12,6 @@ EditorBuildSettings:
     path: Assets/Scenes/Sardine_Simulator.unity
     guid: 1336d3275cc12f84988c3888d18aae29
   - enabled: 0
-    path: Assets/Scenes/AI_Original.unity
+    path: Assets/Scenes/AI_Box_Scene.unity
     guid: 658b62966a50e544c8d7e25f81736d7f
   m_configObjects: {}

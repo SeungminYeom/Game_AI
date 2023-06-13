@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class PreyMovement : Movement
@@ -19,20 +20,29 @@ public class PreyMovement : Movement
         public float feelerLength;
         public float searchRadius;
         public float fleeRadius;
-
     }
 
     [SerializeField]
     Value value;
 
-    List<Collider> predatorInAround;
+    List<GameObject> predatorInAround;
 
     Coroutine searchNeighbor;
     Coroutine searchPredator;
 
     private void Awake()
     {
-        value = JsonUtility.FromJson<Value>(Resources.Load<TextAsset>("Json/Prey").text);
+        List<float> list = GameObject.Find("GameManager").GetComponent<GameManager>().GetPreyValue();
+        value.speed                     = list[0];
+        value.avoidanceSteeringForce    = list[1];
+        value.cohesionSteeringForce     = list[2];
+        value.alignmentSteeringForce    = list[3];
+        value.separationSteeringForce   = list[4];
+        value.fleeSteeringForce         = list[5];
+        value.maxForce                  = list[6];
+        value.feelerLength              = list[7];
+        value.searchRadius              = list[8];
+        value.fleeRadius                = list[9];
     }
 
     new void Start()
@@ -41,7 +51,7 @@ public class PreyMovement : Movement
 
         rigid = GetComponent<Rigidbody>();
 
-        predatorInAround = new List<Collider>();
+        predatorInAround = new List<GameObject>();
 
         searchNeighbor = StartCoroutine(SearchNeighbor());
         searchPredator = StartCoroutine(SearchPredator());
@@ -49,14 +59,13 @@ public class PreyMovement : Movement
 
     void Update()
     {
-        //wallAvoidVec = WallAvoid(value.feelerLength) * value.avoidanceSteeringForce;
-        //cohesionVec = Cohesion() * value.cohesionSteeringForce;
-        //alignmentVec = Alignment() * value.alignmentSteeringForce;
-        //separationVec = Separation() * value.separationSteeringForce;
-        //FleeVec = Flee(predatorInAround) * value.fleeSteeringForce;
+        wallAvoidVec = WallAvoid(value.feelerLength) * value.avoidanceSteeringForce;
+        cohesionVec = Cohesion() * value.cohesionSteeringForce;
+        alignmentVec = Alignment() * value.alignmentSteeringForce;
+        separationVec = Separation() * value.separationSteeringForce;
+        fleeVec = Flee(predatorInAround) * value.fleeSteeringForce;
 
-        //dirToLook = wallAvoidVec + cohesionVec + alignmentVec + separationVec + FleeVec;
-        dirToLook = Calculator();
+        dirToLook = wallAvoidVec + cohesionVec + alignmentVec + separationVec + fleeVec + Revolution(15);
         dirToLook = Vector3.Lerp(transform.forward, dirToLook, Time.deltaTime);
         transform.localRotation = Quaternion.LookRotation(dirToLook);
     }
@@ -76,8 +85,8 @@ public class PreyMovement : Movement
 
         for (int i = 0; i < Mathf.Clamp(preyHits.Length, 0, 20); i++)
         {
-            if (Vector3.Dot(preyHits[i].transform.position, transform.position) > 0.96f)
-                objInSight.Add(preyHits[i]);
+            if (Vector3.Dot(preyHits[i].transform.position, transform.position) > 0.96f && preyHits[i].gameObject != gameObject)
+                objInSight.Add(preyHits[i].gameObject);
         }
 
         yield return new WaitForSeconds(Random.Range(0.4f, 0.8f));
@@ -92,7 +101,7 @@ public class PreyMovement : Movement
 
         foreach (var hit in predatorHits)
         {
-            predatorInAround.Add(hit);
+            predatorInAround.Add(hit.gameObject);
         }
 
         yield return new WaitForSeconds(0.1f);
@@ -103,51 +112,25 @@ public class PreyMovement : Movement
     {
         Vector3 calculatedVec = Vector3.zero;
 
-        // 10일 때 40 전후의 값을 가짐
         wallAvoidVec = WallAvoid(value.feelerLength) * value.avoidanceSteeringForce;
         if (!AccumulateForce(ref calculatedVec, wallAvoidVec))
-        {
             return calculatedVec;
-        }
 
-        // 70일 때 80~110
-        FleeVec = Flee(predatorInAround) * value.fleeSteeringForce;
-        if (!AccumulateForce(ref calculatedVec, FleeVec))
-        {
-            //Debug.Log("벽에서 멀어지기");
+        fleeVec = Flee(predatorInAround) * value.fleeSteeringForce;
+        if (!AccumulateForce(ref calculatedVec, fleeVec))
             return calculatedVec;
-        }
 
-        // 8일 때 90~140
         separationVec = Separation() * value.separationSteeringForce;
         if (!AccumulateForce(ref calculatedVec, separationVec))
-        {
-            //Debug.Log("도망치기");
             return calculatedVec;
-        }
-
-
-        //if (calculatedVec.magnitude >= 58)
-        //    Debug.Log(calculatedVec.magnitude);
 
         alignmentVec = Alignment() * value.alignmentSteeringForce;
         if (!AccumulateForce(ref calculatedVec, alignmentVec))
-        {
-            //Debug.Log("멀어지기");
             return calculatedVec;
-        }
 
         cohesionVec = Cohesion() * value.cohesionSteeringForce;
         if (!AccumulateForce(ref calculatedVec, cohesionVec))
-        {
-            //Debug.Log("평균방향");
             return calculatedVec;
-        }
-
-
-        //if (calculatedVec.magnitude >= value.maxForce)
-        //Debug.Log(calculatedVec.magnitude);
-
 
         return calculatedVec;
     }
@@ -157,9 +140,7 @@ public class PreyMovement : Movement
         float remainingSize = value.maxForce - runningTot.magnitude;
 
         if (remainingSize <= 0)
-        {
             return false;
-        }
 
         if (forceToAdd.magnitude < remainingSize)
             runningTot += forceToAdd;
