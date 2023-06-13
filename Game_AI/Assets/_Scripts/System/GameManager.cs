@@ -1,7 +1,9 @@
 using Cinemachine;
 using System.Collections;
 using System.Collections.Generic;
+using System.Drawing;
 using UnityEngine;
+using Color = UnityEngine.Color;
 
 public class GameManager : MonoBehaviour
 {
@@ -23,6 +25,15 @@ public class GameManager : MonoBehaviour
 
     GameObject walls;
 
+    [SerializeField]
+    List<GameObject> preys;
+    [SerializeField]
+    List<GameObject> predators;
+
+    Coroutine calculatorAvgFps;
+
+    float avgFps = 0;
+
     void Awake()
     {
         Screen.SetResolution(1920, 1080, true);
@@ -34,11 +45,15 @@ public class GameManager : MonoBehaviour
     {
         Cursor.lockState = CursorLockMode.Locked;
 
+        preys = new List<GameObject>();
+        predators = new List<GameObject>();
+
         walls = GameObject.Find("Walls");
 
         CreateAquarium();
         SpawnPrey();
         SpawnPredator();
+        calculatorAvgFps = StartCoroutine(CalculatorAvgFps());
     }
 
     void Update()
@@ -78,6 +93,7 @@ public class GameManager : MonoBehaviour
 
             prey = Instantiate(Resources.Load("Prefabs/Fish"), pos, Quaternion.Euler(dir)) as GameObject;
             prey.transform.SetParent(preyList.transform);
+            preys.Add(prey);
         }
     }
 
@@ -95,6 +111,43 @@ public class GameManager : MonoBehaviour
             predator = Instantiate(Resources.Load("Prefabs/Penguin"), pos, Quaternion.identity) as GameObject;
             predator.transform.LookAt(Vector3.zero);
             predator.transform.SetParent(predatorList.transform);
+            predators.Add(predator);
         }
+    }
+
+    void OnGUI()
+    {
+        Rect position = new Rect(30, 20, Screen.width, Screen.height);
+
+        GUIStyle style = new GUIStyle();
+        style.fontSize = 50;
+        style.normal.textColor = Color.black;
+
+        GUI.Label(position, string.Format("{0:N1} FPS", avgFps), style);
+    }
+
+    IEnumerator CalculatorAvgFps()
+    {
+        float beginTime = Time.time;
+        float fpsSum = 0f;
+        float length = 0;
+
+        while (Time.time - beginTime < 0.5f)
+        {
+            fpsSum += 1.0f / Time.deltaTime;
+            length++;
+
+            yield return null;
+        }
+
+        avgFps = fpsSum / length;
+
+        calculatorAvgFps = StartCoroutine(CalculatorAvgFps());
+    }
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireCube(Vector3.zero, new Vector3(50, 50, 50));
     }
 }

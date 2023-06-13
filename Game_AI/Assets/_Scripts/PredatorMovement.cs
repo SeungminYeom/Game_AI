@@ -1,9 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
-public class PredatorMovement : MonoBehaviour
+public class PredatorMovement : Movement
 {
     [System.Serializable]
     class Value
@@ -22,211 +21,69 @@ public class PredatorMovement : MonoBehaviour
     [SerializeField]
     Value value;
 
-    Rigidbody rigid;
-
-    List<Collider> collidersInSight;
-
     Coroutine search;
 
-    Vector3 dirToLook;
-    Vector3 avoidanceVec;
-    Vector3 cohesionVec;
-    Vector3 alignmentVec;
-    Vector3 separationVec;
-
-    int wallMask;
-    int preyMask;
-    int predatorMask;
-
-    float decelerationRate;
+    //float decelerationRate;
 
     private void Awake()
     {
         value = JsonUtility.FromJson<Value>(Resources.Load<TextAsset>("Json/Predator").text);
-        rigid = GetComponent<Rigidbody>();
     }
 
-    void Start()
+    new void Start()
     {
-        collidersInSight = new List<Collider>();
+        base.Start();
 
-        wallMask        = 1 << LayerMask.NameToLayer("Wall");
-        preyMask        = 1 << LayerMask.NameToLayer("Prey");
-        predatorMask    = 1 << LayerMask.NameToLayer("Predator");
+        rigid = GetComponent<Rigidbody>();
 
-        search = StartCoroutine(Search());
+        search = StartCoroutine(SearchPrey());
     }
 
     void Update()
     {
-        avoidanceVec = Avoidance();
+        wallAvoidVec = WallAvoid(value.feelerLength) * value.avoidanceSteeringForce;
         cohesionVec = Cohesion() * value.cohesionSteeringForce;
-        //alignmentVec = Alignment() * value.alignmentSteeringForce;
-        //separationVec = Separation() * value.separationSteeringForce;
 
-        dirToLook = avoidanceVec + cohesionVec + alignmentVec + separationVec;
+        dirToLook = wallAvoidVec + cohesionVec + alignmentVec + separationVec;
         dirToLook = Vector3.Lerp(transform.forward, dirToLook, Time.deltaTime);
         transform.localRotation = Quaternion.LookRotation(dirToLook);
     }
 
     private void FixedUpdate()
     {
-        Vector3 vec = transform.forward * value.speed * decelerationRate;
+        //Vector3 vec = transform.forward * value.speed * decelerationRate;
+        Vector3 vec = transform.forward * value.speed;
         rigid.velocity = vec;
     }
 
-    IEnumerator Search()
+    IEnumerator SearchPrey()
     {
-        if (collidersInSight.Count > 0)
-            collidersInSight.Clear();
+        if (objInSight.Count > 0)
+            objInSight.Clear();
 
-        Collider[] hits = Physics.OverlapSphere(transform.localPosition, value.searchDistance, preyMask);
+        Collider[] preyHits = Physics.OverlapSphere(transform.localPosition, value.searchDistance, preyMask);
 
-        int hitsMax = Mathf.Clamp(hits.Length, 0, 20);
-
-        //foreach (var hit in hits)
-        for (int i = 0; i < hitsMax; i++)
+        for (int i = 0; i < Mathf.Clamp(preyHits.Length, 0, 20); i++)
         {
-            if (Vector3.Dot(hits[i].transform.position, transform.position) > 0)
-                collidersInSight.Add(hits[i]);
-
-            //if (Vector3.Dot(hit.transform.position, transform.position) > 0.96f)
-            //    collidersInSight.Add(hit);
+            if (Vector3.Dot(preyHits[i].transform.position, transform.position) > 0)
+                objInSight.Add(preyHits[i]);
         }
 
         yield return new WaitForSeconds(Random.Range(0.8f, 1.6f));
-        search = StartCoroutine(Search());
+        search = StartCoroutine(SearchPrey());
     }
 
-    Vector3 Avoidance()
-    {
-        RaycastHit[] hit = new RaycastHit[4];
-        RaycastHit proximateHit;
-        float feelerLength = value.feelerLength;
-
-        Physics.Raycast(transform.localPosition, transform.forward, out proximateHit, value.feelerLength, wallMask);
-        Physics.Raycast(transform.localPosition, (transform.forward + transform.right).normalized, out hit[0], value.feelerLength * 0.5f, wallMask);
-        Physics.Raycast(transform.localPosition, (transform.forward - transform.right).normalized, out hit[1], value.feelerLength * 0.5f, wallMask);
-        Physics.Raycast(transform.localPosition, (transform.forward + transform.up).normalized, out hit[2], value.feelerLength * 0.5f, wallMask);
-        Physics.Raycast(transform.localPosition, (transform.forward - transform.up).normalized, out hit[3], value.feelerLength * 0.5f, wallMask);
-
-        // 가장 가까운 hit 찾기
-        for (int i = 0; i < hit.Length; i++)
-        {
-            if (hit[i].collider == null) continue;
-
-            if (proximateHit.distance > hit[i].distance)
-            {
-                proximateHit = hit[i];
-                feelerLength = value.feelerLength * 0.5f;
-            }
-        }
-
-        if (proximateHit.collider == null)
-        {
-            decelerationRate = 1.0f;
-        }
-        else if (proximateHit.collider != null)
-        {
-            if (proximateHit.distance / feelerLength < 0.3f)
-                decelerationRate = 0.0f;
-            else
-                decelerationRate = proximateHit.distance / feelerLength;
-
-            Vector3 steeringForce = proximateHit.normal * (feelerLength / proximateHit.distance) * value.avoidanceSteeringForce;
-            //Vector3 steeringForce = proximateHit.normal * (feelerLength * 2f / Mathf.Pow(proximateHit.distance, 2));
-            //Vector3 steeringForce = proximateHit.normal * (feelerLength / proximateHit.distance);
-            //Vector3 steeringForce = proximateHit.normal * (feelerLength / Mathf.Pow(proximateHit.distance, 2));
-            //Vector3 steeringForce = proximateHit.normal * (feelerLength / Mathf.Pow(proximateHit.distance, 3));
-
-            return steeringForce;
-        }
-
-        return transform.forward;
-    }
-
-    // 주변 물고기의 중심 벡터로 이동
-    Vector3 Cohesion()
-    {
-        Vector3 centerVec = Vector3.zero;
-
-        if (collidersInSight.Count > 1)
-        {
-            foreach (var hit in collidersInSight)
-            {
-                centerVec += hit.transform.position;
-            }
-        }
-        else
-        {
-            return centerVec;
-        }
-
-        centerVec /= collidersInSight.Count;
-        centerVec -= transform.position;
-        centerVec.Normalize();
-
-        return centerVec;
-    }
-
-    // 주변 물고기의 Heading 벡터의 평균으로 회전
-    Vector3 Alignment()
-    {
-        Vector3 centerVec = Vector3.zero;
-
-        if (collidersInSight.Count > 1)
-        {
-            foreach (var hit in collidersInSight)
-            {
-                centerVec += hit.transform.forward;
-            }
-        }
-        else
-        {
-            return centerVec;
-        }
-
-        centerVec /= collidersInSight.Count;
-        centerVec -= transform.forward;
-        centerVec.Normalize();
-
-        return centerVec;
-    }
-
-    // 주변 물고기와 거리 벌리기 
-    Vector3 Separation()
-    {
-        Vector3 centerVec = Vector3.zero;
-
-        if (collidersInSight.Count > 1)
-        {
-            foreach (var hit in collidersInSight)
-            {
-                Vector3 toThisFish = transform.position - hit.transform.position;
-                if (toThisFish.magnitude < 0.0001f) continue;
-
-                centerVec += toThisFish.normalized / toThisFish.magnitude;
-            }
-        }
-        else
-        {
-            return centerVec;
-        }
-
-        return centerVec;
-    }
-
-    public void OnDrawGizmos()
-    {
-        Gizmos.color = Color.green;
-        Gizmos.DrawLine(transform.localPosition, transform.localPosition + transform.forward * value.feelerLength);
-        Gizmos.DrawLine(transform.localPosition, transform.localPosition + (transform.forward + transform.right).normalized * value.feelerLength * 0.5f);
-        Gizmos.DrawLine(transform.localPosition, transform.localPosition + (transform.forward - transform.right).normalized * value.feelerLength * 0.5f);
-        Gizmos.DrawLine(transform.localPosition, transform.localPosition + (transform.forward + transform.up).normalized * value.feelerLength * 0.5f);
-        Gizmos.DrawLine(transform.localPosition, transform.localPosition + (transform.forward - transform.up).normalized * value.feelerLength * 0.5f);
+    //public void OnDrawGizmos()
+    //{
+        //Gizmos.color = Color.green;
+        //Gizmos.DrawLine(transform.localPosition, transform.localPosition + transform.forward * value.feelerLength);
+        //Gizmos.DrawLine(transform.localPosition, transform.localPosition + (transform.forward + transform.right).normalized * value.feelerLength * 0.5f);
+        //Gizmos.DrawLine(transform.localPosition, transform.localPosition + (transform.forward - transform.right).normalized * value.feelerLength * 0.5f);
+        //Gizmos.DrawLine(transform.localPosition, transform.localPosition + (transform.forward + transform.up).normalized * value.feelerLength * 0.5f);
+        //Gizmos.DrawLine(transform.localPosition, transform.localPosition + (transform.forward - transform.up).normalized * value.feelerLength * 0.5f);
 
         //Gizmos.color = Color.white;
         //Gizmos.DrawWireSphere(transform.position, value.searchDistance);
         //Gizmos.DrawLine(transform.localPosition, transform.localPosition + Cohesion() * value.feelerLength);
-    }
+    //}
 }

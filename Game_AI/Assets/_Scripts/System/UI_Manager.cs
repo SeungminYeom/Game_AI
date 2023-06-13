@@ -98,7 +98,7 @@ public class UI_Manager : MonoBehaviour
             List<RaycastResult> results = new List<RaycastResult>();
             raycast.Raycast(pointerEventData, results);
 
-            string str ="";
+            string str = "";
             if (results.Count > 0)
             {
                 if (commentDict.ContainsKey(results[0].gameObject.name))

@@ -2,14 +2,15 @@
     "speed"                 : 10,
 
 
-    "avoidanceSteeringForce"    : 10,
+    "avoidanceSteeringForce"    : 20,
     "cohesionSteeringForce"     : 4,
     "alignmentSteeringForce"    : 8,
-    "separationSteeringForce"   : 2,
-    "fleeSteeringForce"         : 150,
+    "separationSteeringForce"   : 4,
+    "fleeSteeringForce"         : 70,
+    "maxForce"                  : 60,
 
 
-    "feelerLength"              : 15,
+    "feelerLength"              : 6,
     "searchRadius"              : 6,
     "fleeRadius"                : 15
 }
