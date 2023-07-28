@@ -1,5 +1,4 @@
-# Game_AI
-## 정어리 시뮬레이터 (Sardine Simulator)
+# Game_AI : 정어리 시뮬레이터 (Sardine Simulator)
 <br/>
 
 ## 1. Program Inroduce
