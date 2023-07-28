@@ -14,6 +14,8 @@
 * 'Boids' 알고리즘을 응용한 정어리 시뮬레이터
 * Prey(정어리)와 Predator(펭귄)의 움직임 관찰
 * Tap(메뉴), Alpha Key 1 ~ 3(카메라 전환)
+
+**>> [Download](https://github.com/SeungminYeom/Game_AI/releases/tag/1.0.0)**
 <br/><br/><br/>
 
 ## 2. Sample Image
