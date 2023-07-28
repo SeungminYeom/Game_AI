@@ -1,10 +1,7 @@
-using Cinemachine;
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Drawing;
 using UnityEngine;
-using Color = UnityEngine.Color;
 using Random = UnityEngine.Random;
 
 public static class GameObjectUtils
@@ -23,22 +20,22 @@ public static class GameObjectUtils
     }
 }
 
-public class GameManager : MonoBehaviour
+public class GameData
 {
-    [System.Serializable]
-    public class Value
+    [Serializable]
+    public class SystemValue
     {
-        public float    width;
-        public float    depth;
-        public float    height;
+        public float width;
+        public float depth;
+        public float height;
 
-        public float    spawnPosRange;
-        public int      spawnRotRange;
-        public int      preySpawnAmount;
-        public int      predatorSpawnAmount;
+        public float spawnPosRange;
+        public int spawnRotRange;
+        public int preySpawnAmount;
+        public int predatorSpawnAmount;
     }
 
-    [System.Serializable]
+    [Serializable]
     public class PredatorValue
     {
         public float speed;
@@ -50,7 +47,7 @@ public class GameManager : MonoBehaviour
         public float searchRadius;
     }
 
-    [System.Serializable]
+    [Serializable]
     public class PreyValue
     {
         public float speed;
@@ -66,20 +63,18 @@ public class GameManager : MonoBehaviour
         public float searchRadius;
         public float fleeRadius;
     }
+}
 
-    [SerializeField]
-    Value value;
-    [SerializeField]
-    PreyValue preyValue;
-    [SerializeField]
-    PredatorValue predatorValue;
+public class GameManager : MonoBehaviour
+{
+    [SerializeField] GameData.SystemValue   systemValue;
+    [SerializeField] GameData.PredatorValue predatorValue;
+    [SerializeField] GameData.PreyValue     preyValue;
 
     GameObject walls;
 
-    [SerializeField]
-    List<GameObject> preys;
-    [SerializeField]
-    List<GameObject> predators;
+    [SerializeField] List<GameObject> preys;
+    [SerializeField] List<GameObject> predators;
 
     Coroutine calculatorAvgFps;
 
@@ -88,10 +83,6 @@ public class GameManager : MonoBehaviour
     void Awake()
     {
         Screen.SetResolution(1920, 1080, true);
-
-        value           = JsonUtility.FromJson<Value>(Resources.Load<TextAsset>("Json/System").text);
-        preyValue       = JsonUtility.FromJson<PreyValue>(Resources.Load<TextAsset>("Json/Prey").text);
-        predatorValue   = JsonUtility.FromJson<PredatorValue>(Resources.Load<TextAsset>("Json/Predator").text);
     }
 
     void Start()
@@ -111,19 +102,19 @@ public class GameManager : MonoBehaviour
 
     void CreateBox()
     {
-        walls.transform.Find("Top").localPosition       = new Vector3(0, value.height * 0.5f, 0);
-        walls.transform.Find("Bottom").localPosition    = new Vector3(0, -value.height * 0.5f, 0);
-        walls.transform.Find("North").localPosition     = new Vector3(0, 0, value.depth * 0.5f);
-        walls.transform.Find("South").localPosition     = new Vector3(0, 0, -value.depth * 0.5f);
-        walls.transform.Find("East").localPosition      = new Vector3(value.width * 0.5f, 0, 0);
-        walls.transform.Find("West").localPosition      = new Vector3(-value.width * 0.5f, 0, 0);
+        walls.transform.Find("Top").localPosition       = new Vector3(0, systemValue.height * 0.5f, 0);
+        walls.transform.Find("Bottom").localPosition    = new Vector3(0, -systemValue.height * 0.5f, 0);
+        walls.transform.Find("North").localPosition     = new Vector3(0, 0, systemValue.depth * 0.5f);
+        walls.transform.Find("South").localPosition     = new Vector3(0, 0, -systemValue.depth * 0.5f);
+        walls.transform.Find("East").localPosition      = new Vector3(systemValue.width * 0.5f, 0, 0);
+        walls.transform.Find("West").localPosition      = new Vector3(-systemValue.width * 0.5f, 0, 0);
 
-        walls.transform.Find("Top").localScale          = new Vector3(value.width * 0.1f, 1, value.depth * 0.1f);
-        walls.transform.Find("Bottom").localScale       = new Vector3(value.width * 0.1f, 1, value.depth * 0.1f);
-        walls.transform.Find("North").localScale        = new Vector3(value.width * 0.1f, 1, value.height * 0.1f);
-        walls.transform.Find("South").localScale        = new Vector3(value.width * 0.1f, 1, value.height * 0.1f);
-        walls.transform.Find("East").localScale         = new Vector3(value.height * 0.1f, 1, value.depth * 0.1f);
-        walls.transform.Find("West").localScale         = new Vector3(value.height * 0.1f, 1, value.depth * 0.1f);
+        walls.transform.Find("Top").localScale          = new Vector3(systemValue.width * 0.1f, 1, systemValue.depth * 0.1f);
+        walls.transform.Find("Bottom").localScale       = new Vector3(systemValue.width * 0.1f, 1, systemValue.depth * 0.1f);
+        walls.transform.Find("North").localScale        = new Vector3(systemValue.width * 0.1f, 1, systemValue.height * 0.1f);
+        walls.transform.Find("South").localScale        = new Vector3(systemValue.width * 0.1f, 1, systemValue.height * 0.1f);
+        walls.transform.Find("East").localScale         = new Vector3(systemValue.height * 0.1f, 1, systemValue.depth * 0.1f);
+        walls.transform.Find("West").localScale         = new Vector3(systemValue.height * 0.1f, 1, systemValue.depth * 0.1f);
     }
 
     public List<float> GetValue(string name)
@@ -140,7 +131,7 @@ public class GameManager : MonoBehaviour
             returnList.Add(preyValue.fleeSteeringForce);
             returnList.Add(preyValue.searchRadius);
             returnList.Add(preyValue.fleeRadius);
-            returnList.Add(value.preySpawnAmount);
+            returnList.Add(systemValue.preySpawnAmount);
         }
         else if (name == "Predator")
         {
@@ -148,7 +139,7 @@ public class GameManager : MonoBehaviour
             returnList.Add(predatorValue.avoidanceSteeringForce);
             returnList.Add(predatorValue.cohesionSteeringForce);
             returnList.Add(predatorValue.searchRadius);
-            returnList.Add(value.predatorSpawnAmount);
+            returnList.Add(systemValue.predatorSpawnAmount);
         }
 
         return returnList;
@@ -166,7 +157,7 @@ public class GameManager : MonoBehaviour
             preyValue.fleeSteeringForce         = list[5];
             preyValue.searchRadius              = list[6];
             preyValue.fleeRadius                = list[7];
-            value.preySpawnAmount               = (int)list[8];
+            systemValue.preySpawnAmount               = (int)list[8];
 
             Debug.Log("저장 완료");
             Debug.Log(preyValue.speed);
@@ -177,7 +168,7 @@ public class GameManager : MonoBehaviour
             predatorValue.avoidanceSteeringForce    = list[1];
             predatorValue.cohesionSteeringForce     = list[2];
             predatorValue.searchRadius              = list[3];
-            value.predatorSpawnAmount               = (int)list[4];
+            systemValue.predatorSpawnAmount               = (int)list[4];
         }
     }
 
@@ -212,13 +203,13 @@ public class GameManager : MonoBehaviour
         GameObject prey;
         GameObject preyList = GameObject.Find("PreyList");
 
-        for (int i = 0; i < value.preySpawnAmount; i++)
+        for (int i = 0; i < systemValue.preySpawnAmount; i++)
         {
-            Vector3 pos = new Vector3(Random.Range(-value.width * value.spawnPosRange, value.width * value.spawnPosRange),
-                                      Random.Range(-value.height * value.spawnPosRange, value.height * value.spawnPosRange),
-                                      Random.Range(-value.depth * value.spawnPosRange, value.depth * value.spawnPosRange));
-            Vector3 dir = new Vector3(Random.Range(-value.spawnRotRange, value.spawnRotRange),
-                                      Random.Range(-value.spawnRotRange, value.spawnRotRange),
+            Vector3 pos = new Vector3(Random.Range(-systemValue.width * systemValue.spawnPosRange, systemValue.width * systemValue.spawnPosRange),
+                                      Random.Range(-systemValue.height * systemValue.spawnPosRange, systemValue.height * systemValue.spawnPosRange),
+                                      Random.Range(-systemValue.depth * systemValue.spawnPosRange, systemValue.depth * systemValue.spawnPosRange));
+            Vector3 dir = new Vector3(Random.Range(-systemValue.spawnRotRange, systemValue.spawnRotRange),
+                                      Random.Range(-systemValue.spawnRotRange, systemValue.spawnRotRange),
                                       0);
 
             prey = Instantiate(Resources.Load("Prefabs/Fish"), pos, Quaternion.Euler(dir)) as GameObject;
@@ -232,11 +223,11 @@ public class GameManager : MonoBehaviour
         GameObject predator;
         GameObject predatorList = GameObject.Find("PredatorList");
 
-        for (int i = 0; i < value.predatorSpawnAmount; i++)
+        for (int i = 0; i < systemValue.predatorSpawnAmount; i++)
         {
-            Vector3 pos = new Vector3(Random.Range(-value.width * value.spawnPosRange, value.width * value.spawnPosRange),
-                                      Random.Range(-value.height * value.spawnPosRange, value.height * value.spawnPosRange),
-                                      Random.Range(-value.depth * value.spawnPosRange, value.depth * value.spawnPosRange));
+            Vector3 pos = new Vector3(Random.Range(-systemValue.width * systemValue.spawnPosRange, systemValue.width * systemValue.spawnPosRange),
+                                      Random.Range(-systemValue.height * systemValue.spawnPosRange, systemValue.height * systemValue.spawnPosRange),
+                                      Random.Range(-systemValue.depth * systemValue.spawnPosRange, systemValue.depth * systemValue.spawnPosRange));
 
             predator = Instantiate(Resources.Load("Prefabs/Penguin"), pos, Quaternion.identity) as GameObject;
             predator.transform.LookAt(Vector3.zero);

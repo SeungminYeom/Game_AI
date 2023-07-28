@@ -4,31 +4,24 @@ using UnityEngine;
 
 public class PredatorMovement : Movement
 {
-    [System.Serializable]
-    class Value
-    {
-        public float speed;
+    public float speed;
 
-        public float avoidanceSteeringForce;
-        public float cohesionSteeringForce;
+    public float avoidanceSteeringForce;
+    public float cohesionSteeringForce;
 
-        public float feelerLength;
-        public float searchRadius;
-    }
-
-    [SerializeField]
-    Value value;
+    public float feelerLength;
+    public float searchRadius;
 
     Coroutine search;
 
     private void Awake()
     {
         List<float> list = GameObject.Find("GameManager").GetComponent<GameManager>().GetPredatorValue();
-        value.speed                     = list[0];
-        value.avoidanceSteeringForce    = list[1];
-        value.cohesionSteeringForce     = list[2];
-        value.feelerLength              = list[3];
-        value.searchRadius              = list[4];
+        speed                     = list[0];
+        avoidanceSteeringForce    = list[1];
+        cohesionSteeringForce     = list[2];
+        feelerLength              = list[3];
+        searchRadius              = list[4];
     }
 
     new void Start()
@@ -42,8 +35,8 @@ public class PredatorMovement : Movement
 
     void Update()
     {
-        wallAvoidVec = WallAvoid(value.feelerLength) * value.avoidanceSteeringForce;
-        cohesionVec = Cohesion() * value.cohesionSteeringForce;
+        wallAvoidVec = WallAvoid(feelerLength) * avoidanceSteeringForce;
+        cohesionVec = Cohesion() * cohesionSteeringForce;
 
         dirToLook = wallAvoidVec + cohesionVec + Revolution(50);
         dirToLook = Vector3.Lerp(transform.forward, dirToLook, Time.deltaTime);
@@ -52,7 +45,7 @@ public class PredatorMovement : Movement
 
     private void FixedUpdate()
     {
-        Vector3 vec = transform.forward * value.speed;
+        Vector3 vec = transform.forward * speed;
         rigid.velocity = vec;
     }
 
@@ -61,7 +54,7 @@ public class PredatorMovement : Movement
         if (objInSight.Count > 0)
             objInSight.Clear();
 
-        Collider[] preyHits = Physics.OverlapSphere(transform.localPosition, value.searchRadius, preyMask);
+        Collider[] preyHits = Physics.OverlapSphere(transform.localPosition, searchRadius, preyMask);
 
         for (int i = 0; i < Mathf.Clamp(preyHits.Length, 0, 20); i++)
         {

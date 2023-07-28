@@ -5,25 +5,18 @@ using UnityEngine;
 
 public class PreyMovement : Movement
 {
-    [System.Serializable]
-    class Value
-    {
-        public float speed;
+    public float speed;
 
-        public float avoidanceSteeringForce;
-        public float cohesionSteeringForce;
-        public float alignmentSteeringForce;
-        public float separationSteeringForce;
-        public float fleeSteeringForce;
-        public float maxForce;
+    public float avoidanceSteeringForce;
+    public float cohesionSteeringForce;
+    public float alignmentSteeringForce;
+    public float separationSteeringForce;
+    public float fleeSteeringForce;
+    public float maxForce;
 
-        public float feelerLength;
-        public float searchRadius;
-        public float fleeRadius;
-    }
-
-    [SerializeField]
-    Value value;
+    public float feelerLength;
+    public float searchRadius;
+    public float fleeRadius;
 
     List<GameObject> predatorInAround;
 
@@ -33,16 +26,16 @@ public class PreyMovement : Movement
     private void Awake()
     {
         List<float> list = GameObject.Find("GameManager").GetComponent<GameManager>().GetPreyValue();
-        value.speed                     = list[0];
-        value.avoidanceSteeringForce    = list[1];
-        value.cohesionSteeringForce     = list[2];
-        value.alignmentSteeringForce    = list[3];
-        value.separationSteeringForce   = list[4];
-        value.fleeSteeringForce         = list[5];
-        value.maxForce                  = list[6];
-        value.feelerLength              = list[7];
-        value.searchRadius              = list[8];
-        value.fleeRadius                = list[9];
+        speed                     = list[0];
+        avoidanceSteeringForce    = list[1];
+        cohesionSteeringForce     = list[2];
+        alignmentSteeringForce    = list[3];
+        separationSteeringForce   = list[4];
+        fleeSteeringForce         = list[5];
+        maxForce                  = list[6];
+        feelerLength              = list[7];
+        searchRadius              = list[8];
+        fleeRadius                = list[9];
     }
 
     new void Start()
@@ -59,11 +52,11 @@ public class PreyMovement : Movement
 
     void Update()
     {
-        wallAvoidVec = WallAvoid(value.feelerLength) * value.avoidanceSteeringForce;
-        cohesionVec = Cohesion() * value.cohesionSteeringForce;
-        alignmentVec = Alignment() * value.alignmentSteeringForce;
-        separationVec = Separation() * value.separationSteeringForce;
-        fleeVec = Flee(predatorInAround) * value.fleeSteeringForce;
+        wallAvoidVec = WallAvoid(feelerLength) * avoidanceSteeringForce;
+        cohesionVec = Cohesion() * cohesionSteeringForce;
+        alignmentVec = Alignment() * alignmentSteeringForce;
+        separationVec = Separation() * separationSteeringForce;
+        fleeVec = Flee(predatorInAround) * fleeSteeringForce;
 
         dirToLook = wallAvoidVec + cohesionVec + alignmentVec + separationVec + fleeVec + Revolution(15);
         dirToLook = Vector3.Lerp(transform.forward, dirToLook, Time.deltaTime);
@@ -72,7 +65,7 @@ public class PreyMovement : Movement
 
     private void FixedUpdate()
     {
-        Vector3 vec = transform.forward * value.speed;
+        Vector3 vec = transform.forward * speed;
         rigid.velocity = vec;
     }
 
@@ -81,7 +74,7 @@ public class PreyMovement : Movement
         if (objInSight.Count > 0)
             objInSight.Clear();
 
-        Collider[] preyHits = Physics.OverlapSphere(transform.localPosition, value.searchRadius, preyMask);
+        Collider[] preyHits = Physics.OverlapSphere(transform.localPosition, searchRadius, preyMask);
 
         for (int i = 0; i < Mathf.Clamp(preyHits.Length, 0, 20); i++)
         {
@@ -97,7 +90,7 @@ public class PreyMovement : Movement
     {
         if (predatorInAround.Count > 0) predatorInAround.Clear();
 
-        Collider[] predatorHits = Physics.OverlapSphere(transform.localPosition, value.fleeRadius, predatorMask);
+        Collider[] predatorHits = Physics.OverlapSphere(transform.localPosition, fleeRadius, predatorMask);
 
         foreach (var hit in predatorHits)
         {
@@ -112,23 +105,23 @@ public class PreyMovement : Movement
     {
         Vector3 calculatedVec = Vector3.zero;
 
-        wallAvoidVec = WallAvoid(value.feelerLength) * value.avoidanceSteeringForce;
+        wallAvoidVec = WallAvoid(feelerLength) * avoidanceSteeringForce;
         if (!AccumulateForce(ref calculatedVec, wallAvoidVec))
             return calculatedVec;
 
-        fleeVec = Flee(predatorInAround) * value.fleeSteeringForce;
+        fleeVec = Flee(predatorInAround) * fleeSteeringForce;
         if (!AccumulateForce(ref calculatedVec, fleeVec))
             return calculatedVec;
 
-        separationVec = Separation() * value.separationSteeringForce;
+        separationVec = Separation() * separationSteeringForce;
         if (!AccumulateForce(ref calculatedVec, separationVec))
             return calculatedVec;
 
-        alignmentVec = Alignment() * value.alignmentSteeringForce;
+        alignmentVec = Alignment() * alignmentSteeringForce;
         if (!AccumulateForce(ref calculatedVec, alignmentVec))
             return calculatedVec;
 
-        cohesionVec = Cohesion() * value.cohesionSteeringForce;
+        cohesionVec = Cohesion() * cohesionSteeringForce;
         if (!AccumulateForce(ref calculatedVec, cohesionVec))
             return calculatedVec;
 
@@ -137,7 +130,7 @@ public class PreyMovement : Movement
 
     bool AccumulateForce(ref Vector3 runningTot, Vector3 forceToAdd)
     {
-        float remainingSize = value.maxForce - runningTot.magnitude;
+        float remainingSize = maxForce - runningTot.magnitude;
 
         if (remainingSize <= 0)
             return false;
