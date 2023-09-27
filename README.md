@@ -18,5 +18,5 @@
 <br/><br/><br/>
 
 ## 2. Sample Image
-<img src = "https://github.com/SeungminYeom/Game_AI/assets/81202999/3c8fb2d7-2d9d-442c-9093-cf459beaf948" width="100%"  height="100%">
+<img src = "https://github.com/SeungminYeom/Game_AI/assets/81202999/3c8fb2d7-2d9d-442c-9093-cf459beaf948" width="100%"  height="100%"><br/>
 <img src = "https://github.com/SeungminYeom/Game_AI/assets/81202999/0760fbef-528b-4f86-90ee-9abde93481a2" width="100%"  height="100%">
