@@ -7,5 +7,5 @@
     "spawnPosRange"             : 0.3,
     "spawnRotRange"             : 180,
     "preySpawnAmount"           : 1000,
-    "predatorSpawnAmount"       : 3
+    "predatorSpawnAmount"       : 5
 }

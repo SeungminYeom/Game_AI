@@ -1,0 +1,341 @@
+fileFormatVersion: 2
+guid: 511bff9343fa35a43acd7e694c821924
+ModelImporter:
+  serializedVersion: 22
+  fileIDToRecycleName:
+    100000: //RootNode
+    100002: Conifer Tree
+    100004: Conifer Tree 2
+    100006: Conifer Tree 3
+    100008: Douglas Fir 1
+    100010: Douglas Fir 2
+    100012: Douglas Fir Leaves 2
+    100014: leaves
+    100016: tree
+    100018: Douglas Fir 3
+    100020: Douglas Fir Leaves
+    100022: Douglas Fir 4
+    100024: Douglas Fir Leaves 1
+    100026: Douglas Fir Leaves 3
+    100028: Douglas Fir Leaves 4
+    100030: Douglas Fir 5
+    100032: Douglas Fir Leaves 5
+    100034: Birch 1
+    100036: Birch Leaves 1
+    100038: Birch 2
+    100040: Birch Leaves 2
+    100042: Douglas Fir Leaves 1 Snow
+    100044: Douglas Fir Leaves 2 Snow
+    100046: Douglas Fir Leaves 3 Snow
+    100048: Douglas Fir Leaves 4 Snow
+    100050: Douglas Fir Leaves 5 Snow
+    100052: Cylinder
+    100054: Daed Tree 1
+    100056: Daed Tree 1 Snow
+    100058: Dead Tree 2
+    100060: Dead Tree 2 Snow
+    100062: Stump 1
+    100064: Stump 2
+    100066: Douglas Fir Leaves 1 LOD 1
+    100068: Douglas Fir Leaves 1 LOD 2
+    100070: Douglas Fir Leaves 1 Snow LOD 1
+    100072: Douglas Fir Leaves 1 Snow LOD 2
+    100074: Douglas Fir Leaves 2 LOD 1
+    100076: Douglas Fir Leaves 2 Snow LOD 1
+    100078: Douglas Fir Leaves 3 LOD 1
+    100080: Douglas Fir Leaves 3 Snow LOD 1
+    100082: Douglas Fir Leaves 4 LOD 1
+    100084: Douglas Fir Leaves 4 Snow LOD 1
+    100086: Douglas Fir Leaves 5 LOD 1
+    100088: Douglas Fir Leaves 5 LOD 2
+    100090: Douglas Fir Leaves 5 Snow LOD 1
+    100092: Douglas Fir Leaves 5 Snow LOD 2
+    400000: //RootNode
+    400002: Conifer Tree
+    400004: Conifer Tree 2
+    400006: Conifer Tree 3
+    400008: Douglas Fir 1
+    400010: Douglas Fir 2
+    400012: Douglas Fir Leaves 2
+    400014: leaves
+    400016: tree
+    400018: Douglas Fir 3
+    400020: Douglas Fir Leaves
+    400022: Douglas Fir 4
+    400024: Douglas Fir Leaves 1
+    400026: Douglas Fir Leaves 3
+    400028: Douglas Fir Leaves 4
+    400030: Douglas Fir 5
+    400032: Douglas Fir Leaves 5
+    400034: Birch 1
+    400036: Birch Leaves 1
+    400038: Birch 2
+    400040: Birch Leaves 2
+    400042: Douglas Fir Leaves 1 Snow
+    400044: Douglas Fir Leaves 2 Snow
+    400046: Douglas Fir Leaves 3 Snow
+    400048: Douglas Fir Leaves 4 Snow
+    400050: Douglas Fir Leaves 5 Snow
+    400052: Cylinder
+    400054: Daed Tree 1
+    400056: Daed Tree 1 Snow
+    400058: Dead Tree 2
+    400060: Dead Tree 2 Snow
+    400062: Stump 1
+    400064: Stump 2
+    400066: Douglas Fir Leaves 1 LOD 1
+    400068: Douglas Fir Leaves 1 LOD 2
+    400070: Douglas Fir Leaves 1 Snow LOD 1
+    400072: Douglas Fir Leaves 1 Snow LOD 2
+    400074: Douglas Fir Leaves 2 LOD 1
+    400076: Douglas Fir Leaves 2 Snow LOD 1
+    400078: Douglas Fir Leaves 3 LOD 1
+    400080: Douglas Fir Leaves 3 Snow LOD 1
+    400082: Douglas Fir Leaves 4 LOD 1
+    400084: Douglas Fir Leaves 4 Snow LOD 1
+    400086: Douglas Fir Leaves 5 LOD 1
+    400088: Douglas Fir Leaves 5 LOD 2
+    400090: Douglas Fir Leaves 5 Snow LOD 1
+    400092: Douglas Fir Leaves 5 Snow LOD 2
+    2100000: Trunk
+    2100002: Leaves
+    2100004: No Name
+    2100006: Trunk 2
+    2100008: Snow
+    2100010: Wooid
+    2300000: //RootNode
+    2300002: Conifer Tree
+    2300004: Conifer Tree 2
+    2300006: Conifer Tree 3
+    2300008: Douglas Fir 1
+    2300010: Douglas Fir 2
+    2300012: Douglas Fir Leaves 2
+    2300014: leaves
+    2300016: tree
+    2300018: Douglas Fir 3
+    2300020: Douglas Fir Leaves
+    2300022: Douglas Fir 4
+    2300024: Douglas Fir Leaves 1
+    2300026: Douglas Fir Leaves 3
+    2300028: Douglas Fir Leaves 4
+    2300030: Douglas Fir 5
+    2300032: Douglas Fir Leaves 5
+    2300034: Birch 1
+    2300036: Birch Leaves 1
+    2300038: Birch 2
+    2300040: Birch Leaves 2
+    2300042: Douglas Fir Leaves 1 Snow
+    2300044: Douglas Fir Leaves 2 Snow
+    2300046: Douglas Fir Leaves 3 Snow
+    2300048: Douglas Fir Leaves 4 Snow
+    2300050: Douglas Fir Leaves 5 Snow
+    2300052: Cylinder
+    2300054: Daed Tree 1
+    2300056: Daed Tree 1 Snow
+    2300058: Dead Tree 2
+    2300060: Dead Tree 2 Snow
+    2300062: Stump 1
+    2300064: Stump 2
+    2300066: Douglas Fir Leaves 1 LOD 1
+    2300068: Douglas Fir Leaves 1 LOD 2
+    2300070: Douglas Fir Leaves 1 Snow LOD 1
+    2300072: Douglas Fir Leaves 1 Snow LOD 2
+    2300074: Douglas Fir Leaves 2 LOD 1
+    2300076: Douglas Fir Leaves 2 Snow LOD 1
+    2300078: Douglas Fir Leaves 3 LOD 1
+    2300080: Douglas Fir Leaves 3 Snow LOD 1
+    2300082: Douglas Fir Leaves 4 LOD 1
+    2300084: Douglas Fir Leaves 4 Snow LOD 1
+    2300086: Douglas Fir Leaves 5 LOD 1
+    2300088: Douglas Fir Leaves 5 LOD 2
+    2300090: Douglas Fir Leaves 5 Snow LOD 1
+    2300092: Douglas Fir Leaves 5 Snow LOD 2
+    3300000: //RootNode
+    3300002: Conifer Tree
+    3300004: Conifer Tree 2
+    3300006: Conifer Tree 3
+    3300008: Douglas Fir 1
+    3300010: Douglas Fir 2
+    3300012: Douglas Fir Leaves 2
+    3300014: leaves
+    3300016: tree
+    3300018: Douglas Fir 3
+    3300020: Douglas Fir Leaves
+    3300022: Douglas Fir 4
+    3300024: Douglas Fir Leaves 1
+    3300026: Douglas Fir Leaves 3
+    3300028: Douglas Fir Leaves 4
+    3300030: Douglas Fir 5
+    3300032: Douglas Fir Leaves 5
+    3300034: Birch 1
+    3300036: Birch Leaves 1
+    3300038: Birch 2
+    3300040: Birch Leaves 2
+    3300042: Douglas Fir Leaves 1 Snow
+    3300044: Douglas Fir Leaves 2 Snow
+    3300046: Douglas Fir Leaves 3 Snow
+    3300048: Douglas Fir Leaves 4 Snow
+    3300050: Douglas Fir Leaves 5 Snow
+    3300052: Cylinder
+    3300054: Daed Tree 1
+    3300056: Daed Tree 1 Snow
+    3300058: Dead Tree 2
+    3300060: Dead Tree 2 Snow
+    3300062: Stump 1
+    3300064: Stump 2
+    3300066: Douglas Fir Leaves 1 LOD 1
+    3300068: Douglas Fir Leaves 1 LOD 2
+    3300070: Douglas Fir Leaves 1 Snow LOD 1
+    3300072: Douglas Fir Leaves 1 Snow LOD 2
+    3300074: Douglas Fir Leaves 2 LOD 1
+    3300076: Douglas Fir Leaves 2 Snow LOD 1
+    3300078: Douglas Fir Leaves 3 LOD 1
+    3300080: Douglas Fir Leaves 3 Snow LOD 1
+    3300082: Douglas Fir Leaves 4 LOD 1
+    3300084: Douglas Fir Leaves 4 Snow LOD 1
+    3300086: Douglas Fir Leaves 5 LOD 1
+    3300088: Douglas Fir Leaves 5 LOD 2
+    3300090: Douglas Fir Leaves 5 Snow LOD 1
+    3300092: Douglas Fir Leaves 5 Snow LOD 2
+    4300000: Conifer Tree
+    4300002: Douglas Fir 2
+    4300004: Douglas Fir Leaves 2
+    4300006: Douglas Fir 1
+    4300008: Conifer Tree 3
+    4300010: Conifer Tree 2
+    4300012: tree
+    4300014: leaves
+    4300016: Douglas Fir 3
+    4300018: Douglas Fir Leaves
+    4300020: Douglas Fir Leaves 1
+    4300022: Douglas Fir 4
+    4300024: Douglas Fir Leaves 4
+    4300026: Douglas Fir Leaves 3
+    4300028: Douglas Fir 5
+    4300030: Douglas Fir Leaves 5
+    4300032: Birch 1
+    4300034: Birch Leaves 1
+    4300036: Birch 2
+    4300038: Birch Leaves 2
+    4300040: Douglas Fir Leaves 1 Snow
+    4300042: Douglas Fir Leaves 5 Snow
+    4300044: Douglas Fir Leaves 4 Snow
+    4300046: Douglas Fir Leaves 3 Snow
+    4300048: Douglas Fir Leaves 2 Snow
+    4300050: Daed Tree 1
+    4300052: Daed Tree 1 Snow
+    4300054: Dead Tree 2 Snow
+    4300056: Dead Tree 2
+    4300058: Cylinder
+    4300060: Stump 2
+    4300062: Stump 1
+    4300064: Douglas Fir Leaves 5 LOD 2
+    4300066: Douglas Fir Leaves 5 LOD 1
+    4300068: Douglas Fir Leaves 5 Snow LOD 2
+    4300070: Douglas Fir Leaves 5 Snow LOD 1
+    4300072: Douglas Fir Leaves 4 LOD 1
+    4300074: Douglas Fir Leaves 4 Snow LOD 1
+    4300076: Douglas Fir Leaves 3 LOD 1
+    4300078: Douglas Fir Leaves 3 Snow LOD 1
+    4300080: Douglas Fir Leaves 2 LOD 1
+    4300082: Douglas Fir Leaves 2 Snow LOD 1
+    4300084: Douglas Fir Leaves 1 LOD 2
+    4300086: Douglas Fir Leaves 1 LOD 1
+    4300088: Douglas Fir Leaves 1 Snow LOD 2
+    4300090: Douglas Fir Leaves 1 Snow LOD 1
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Leaves
+    second: {fileID: 2100000, guid: e4a86aa7622470041951791769c77fc4, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: No Name
+    second: {fileID: 2100000, guid: 6d0236ad368269e4eb30f031b23cd78c, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Trunk
+    second: {fileID: 2100000, guid: af8304d6fbc94c74c888c561473faaa2, type: 2}
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+    materialLocation: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    rigImportErrors: 
+    rigImportWarnings: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    importAnimatedCustomProperties: 0
+    importConstraints: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    extraUserProperties: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 0.4
+    meshCompression: 0
+    addColliders: 0
+    importVisibility: 1
+    importBlendShapes: 1
+    importCameras: 1
+    importLights: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    preserveHierarchy: 0
+    indexFormat: 0
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 0
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+    normalCalculationMode: 4
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    serializedVersion: 2
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    rootMotionBoneRotation: {x: 0, y: 0, z: 0, w: 1}
+    hasTranslationDoF: 0
+    hasExtraRoot: 0
+    skeletonHasParents: 1
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 0
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

@@ -1,0 +1,204 @@
+fileFormatVersion: 2
+guid: 22f8e817db9da9044814f340f9ea731b
+ModelImporter:
+  serializedVersion: 22
+  fileIDToRecycleName:
+    100000: //RootNode
+    100002: Clearing
+    100004: Terrain 1
+    100006: Terrain 2
+    100008: Terain 3
+    100010: Terrain 3
+    100012: Terrain 4
+    100014: SurfPatch
+    100016: Terrain 5
+    100018: Terrain 6
+    100020: Rock
+    100022: Flat Ground 1
+    100024: Landscape
+    100026: Landscape.001
+    100028: Landscape.002
+    100030: Landscape.003
+    100032: Landscape.004
+    100034: Landscape.005
+    100036: Landscape.006
+    100038: Landscape.007
+    100040: Landscape.008
+    100042: Landscape.009
+    100044: Large Rock
+    400000: //RootNode
+    400002: Clearing
+    400004: Terrain 1
+    400006: Terrain 2
+    400008: Terain 3
+    400010: Terrain 3
+    400012: Terrain 4
+    400014: SurfPatch
+    400016: Terrain 5
+    400018: Terrain 6
+    400020: Rock
+    400022: Flat Ground 1
+    400024: Landscape
+    400026: Landscape.001
+    400028: Landscape.002
+    400030: Landscape.003
+    400032: Landscape.004
+    400034: Landscape.005
+    400036: Landscape.006
+    400038: Landscape.007
+    400040: Landscape.008
+    400042: Landscape.009
+    400044: Large Rock
+    2100000: No Name
+    2100002: Grass
+    2100004: Path
+    2100006: Rock
+    2300000: //RootNode
+    2300002: Clearing
+    2300004: Terrain 1
+    2300006: Terrain 2
+    2300008: Terain 3
+    2300010: Terrain 3
+    2300012: Terrain 4
+    2300014: SurfPatch
+    2300016: Terrain 5
+    2300018: Terrain 6
+    2300020: Rock
+    2300022: Flat Ground 1
+    2300024: Landscape
+    2300026: Landscape.001
+    2300028: Landscape.002
+    2300030: Landscape.003
+    2300032: Landscape.004
+    2300034: Landscape.005
+    2300036: Landscape.006
+    2300038: Landscape.007
+    2300040: Landscape.008
+    2300042: Landscape.009
+    2300044: Large Rock
+    3300000: //RootNode
+    3300002: Clearing
+    3300004: Terrain 1
+    3300006: Terrain 2
+    3300008: Terain 3
+    3300010: Terrain 3
+    3300012: Terrain 4
+    3300014: SurfPatch
+    3300016: Terrain 5
+    3300018: Terrain 6
+    3300020: Rock
+    3300022: Flat Ground 1
+    3300024: Landscape
+    3300026: Landscape.001
+    3300028: Landscape.002
+    3300030: Landscape.003
+    3300032: Landscape.004
+    3300034: Landscape.005
+    3300036: Landscape.006
+    3300038: Landscape.007
+    3300040: Landscape.008
+    3300042: Landscape.009
+    3300044: Large Rock
+    4300000: SurfPatch
+    4300002: Clearing
+    4300004: Terrain 1
+    4300006: Terrain 2
+    4300008: Terain 3
+    4300010: Terrain 3
+    4300012: Terrain 4
+    4300014: Terrain 5
+    4300016: Terrain 6
+    4300018: Rock
+    4300020: Flat Ground 1
+    4300022: Landscape.009
+    4300024: Landscape.008
+    4300026: Landscape.007
+    4300028: Landscape.006
+    4300030: Landscape.005
+    4300032: Landscape.004
+    4300034: Landscape.003
+    4300036: Landscape.002
+    4300038: Landscape.001
+    4300040: Landscape
+    4300042: Large Rock
+  externalObjects: {}
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+    materialLocation: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    rigImportErrors: 
+    rigImportWarnings: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    importAnimatedCustomProperties: 0
+    importConstraints: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    extraUserProperties: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    importVisibility: 1
+    importBlendShapes: 1
+    importCameras: 1
+    importLights: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    preserveHierarchy: 0
+    indexFormat: 0
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 0
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+    normalCalculationMode: 4
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    serializedVersion: 2
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    rootMotionBoneRotation: {x: 0, y: 0, z: 0, w: 1}
+    hasTranslationDoF: 0
+    hasExtraRoot: 0
+    skeletonHasParents: 1
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 0
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

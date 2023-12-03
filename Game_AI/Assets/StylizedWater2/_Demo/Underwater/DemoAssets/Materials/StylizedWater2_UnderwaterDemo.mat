@@ -124,7 +124,7 @@ Material:
     - _CausticsDistortion: 0
     - _CausticsOn: 1
     - _CausticsSpeed: 0.15
-    - _CausticsTiling: 0.2
+    - _CausticsTiling: 0
     - _CrossPan_IntersectionOn: 0
     - _Cull: 0
     - _Cutoff: 0.5

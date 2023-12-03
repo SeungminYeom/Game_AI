@@ -87,6 +87,11 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
+        systemValue = JsonUtility.FromJson<GameData.SystemValue>(Resources.Load<TextAsset>("Json/System").text);
+        predatorValue = JsonUtility.FromJson<GameData.PredatorValue>(Resources.Load<TextAsset>("Json/Predator").text);
+        preyValue = JsonUtility.FromJson<GameData.PreyValue>(Resources.Load<TextAsset>("Json/prey").text);
+
+
         Cursor.lockState = CursorLockMode.Locked;
 
         preys = new List<GameObject>();
@@ -157,7 +162,7 @@ public class GameManager : MonoBehaviour
             preyValue.fleeSteeringForce         = list[5];
             preyValue.searchRadius              = list[6];
             preyValue.fleeRadius                = list[7];
-            systemValue.preySpawnAmount               = (int)list[8];
+            systemValue.preySpawnAmount         = (int)list[8];
 
             Debug.Log("저장 완료");
             Debug.Log(preyValue.speed);
@@ -168,7 +173,7 @@ public class GameManager : MonoBehaviour
             predatorValue.avoidanceSteeringForce    = list[1];
             predatorValue.cohesionSteeringForce     = list[2];
             predatorValue.searchRadius              = list[3];
-            systemValue.predatorSpawnAmount               = (int)list[4];
+            systemValue.predatorSpawnAmount         = (int)list[4];
         }
     }
 

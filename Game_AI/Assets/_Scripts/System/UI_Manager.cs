@@ -70,7 +70,7 @@ public class UI_Manager : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Tab))
+        if (Input.GetKeyDown(KeyCode.Escape))
         {
             if (!menu.activeSelf)
             {

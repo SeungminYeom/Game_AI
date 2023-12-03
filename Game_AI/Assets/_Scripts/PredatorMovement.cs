@@ -29,12 +29,15 @@ public class PredatorMovement : Movement
         base.Start();
 
         rigid = GetComponent<Rigidbody>();
+        rigid.useGravity = false;
 
         search = StartCoroutine(SearchPrey());
     }
 
     void Update()
     {
+        if (isOutOfWater) return;
+
         wallAvoidVec = WallAvoid(feelerLength) * avoidanceSteeringForce;
         cohesionVec = Cohesion() * cohesionSteeringForce;
 
@@ -45,6 +48,8 @@ public class PredatorMovement : Movement
 
     private void FixedUpdate()
     {
+        if (isOutOfWater) return;
+
         Vector3 vec = transform.forward * speed;
         rigid.velocity = vec;
     }

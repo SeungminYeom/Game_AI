@@ -43,6 +43,7 @@ public class PreyMovement : Movement
         base.Start();
 
         rigid = GetComponent<Rigidbody>();
+        rigid.useGravity = false;
 
         predatorInAround = new List<GameObject>();
 
@@ -52,6 +53,8 @@ public class PreyMovement : Movement
 
     void Update()
     {
+        if (isOutOfWater) return;
+
         wallAvoidVec = WallAvoid(feelerLength) * avoidanceSteeringForce;
         cohesionVec = Cohesion() * cohesionSteeringForce;
         alignmentVec = Alignment() * alignmentSteeringForce;
@@ -65,6 +68,8 @@ public class PreyMovement : Movement
 
     private void FixedUpdate()
     {
+        if (isOutOfWater) return;
+
         Vector3 vec = transform.forward * speed;
         rigid.velocity = vec;
     }
@@ -143,18 +148,20 @@ public class PreyMovement : Movement
         return true;
     }
 
-    //public void OnDrawGizmos()
-    //{
-        //Gizmos.color = Color.green;
-        //    Gizmos.DrawLine(transform.localPosition, transform.localPosition + transform.forward * value.feelerLength);
-        //    Gizmos.DrawLine(transform.localPosition, transform.localPosition + (transform.forward + transform.right).normalized * value.feelerLength * 0.5f);
-        //    Gizmos.DrawLine(transform.localPosition, transform.localPosition + (transform.forward - transform.right).normalized * value.feelerLength * 0.5f);
-        //    Gizmos.DrawLine(transform.localPosition, transform.localPosition + (transform.forward + transform.up).normalized * value.feelerLength * 0.5f);
-        //    Gizmos.DrawLine(transform.localPosition, transform.localPosition + (transform.forward - transform.up).normalized * value.feelerLength * 0.5f);
-        //Gizmos.DrawLine(transform.localPosition, transform.localPosition + FleeVec);
+    /*
+    public void OnDrawGizmos()
+    {
+        Gizmos.color = Color.green;
+            Gizmos.DrawLine(transform.localPosition, transform.localPosition + transform.forward * value.feelerLength);
+            Gizmos.DrawLine(transform.localPosition, transform.localPosition + (transform.forward + transform.right).normalized * value.feelerLength * 0.5f);
+            Gizmos.DrawLine(transform.localPosition, transform.localPosition + (transform.forward - transform.right).normalized * value.feelerLength * 0.5f);
+            Gizmos.DrawLine(transform.localPosition, transform.localPosition + (transform.forward + transform.up).normalized * value.feelerLength * 0.5f);
+            Gizmos.DrawLine(transform.localPosition, transform.localPosition + (transform.forward - transform.up).normalized * value.feelerLength * 0.5f);
+        Gizmos.DrawLine(transform.localPosition, transform.localPosition + FleeVec);
 
-    //    Gizmos.color = Color.white;
-    //    Gizmos.DrawWireSphere(transform.position, value.searchDistance);
-    //    Gizmos.DrawLine(transform.localPosition, transform.localPosition + Cohesion() * value.feelerLength);
-    //}
+        Gizmos.color = Color.white;
+        Gizmos.DrawWireSphere(transform.position, value.searchDistance);
+        Gizmos.DrawLine(transform.localPosition, transform.localPosition + Cohesion() * value.feelerLength);
+    }
+    */
 }

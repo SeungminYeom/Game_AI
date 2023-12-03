@@ -1,0 +1,378 @@
+fileFormatVersion: 2
+guid: 67f72e69f23a4ca47b450c5fa5ba37db
+ModelImporter:
+  serializedVersion: 22
+  fileIDToRecycleName:
+    100000: Balcony Corner
+    100002: Balcony Side
+    100004: Balcony Side Center
+    100006: Balcony Stair Entry 1
+    100008: Balcony Stair Entry 2
+    100010: Cube
+    100012: Door
+    100014: Edging Corner
+    100016: Edging Side
+    100018: Floor
+    100020: House Corner
+    100022: Large Tower Extension
+    100024: Roof Corner
+    100026: Roof Side
+    100028: Stair Top
+    100030: Stairs
+    100032: Stairs Landing
+    100034: Stairs Steep
+    100036: Stairs.001
+    100038: Tower Corner 1
+    100040: Tower Corner 2 Bottom
+    100042: Tower Corner 2 Top
+    100044: Tower Corner Extension 1
+    100046: Tower Door
+    100048: Tower Extension 1
+    100050: Tower Extension 2
+    100052: //RootNode
+    100054: House Side
+    100056: Roof Center
+    100058: Window Frame
+    100060: Window Frame Small
+    100062: Balcony Corner Small
+    100064: Wood Floor
+    100066: Snoaw Rail 1
+    100068: Snoaw Rail 2
+    100070: Snoaw Rail 3
+    100072: Foundation
+    100074: Foundation 2
+    100076: Wood Floor 2
+    100078: House Wall
+    100080: House Wall Corner
+    100082: Railing Exit
+    100084: Roof Center Snow
+    100086: Roof Corner Snow
+    100088: Roof Corner Snow 2
+    100090: Roof Side Snow
+    100092: Roof Side Snow.001
+    100094: Window Pane
+    100096: Window Pane Single
+    100098: Floor Small
+    100100: Floor Wide
+    100102: Roof Corner 2
+    100104: Roof Corner 2.001
+    100106: Roof Corner 2 Snow
+    100108: Edging Corner 2
+    100110: House Wall Corner 2
+    100112: Particle Base
+    400000: Balcony Corner
+    400002: Balcony Side
+    400004: Balcony Side Center
+    400006: Balcony Stair Entry 1
+    400008: Balcony Stair Entry 2
+    400010: Cube
+    400012: Door
+    400014: Edging Corner
+    400016: Edging Side
+    400018: Floor
+    400020: House Corner
+    400022: Large Tower Extension
+    400024: Roof Corner
+    400026: Roof Side
+    400028: Stair Top
+    400030: Stairs
+    400032: Stairs Landing
+    400034: Stairs Steep
+    400036: Stairs.001
+    400038: Tower Corner 1
+    400040: Tower Corner 2 Bottom
+    400042: Tower Corner 2 Top
+    400044: Tower Corner Extension 1
+    400046: Tower Door
+    400048: Tower Extension 1
+    400050: Tower Extension 2
+    400052: //RootNode
+    400054: House Side
+    400056: Roof Center
+    400058: Window Frame
+    400060: Window Frame Small
+    400062: Balcony Corner Small
+    400064: Wood Floor
+    400066: Snoaw Rail 1
+    400068: Snoaw Rail 2
+    400070: Snoaw Rail 3
+    400072: Foundation
+    400074: Foundation 2
+    400076: Wood Floor 2
+    400078: House Wall
+    400080: House Wall Corner
+    400082: Railing Exit
+    400084: Roof Center Snow
+    400086: Roof Corner Snow
+    400088: Roof Corner Snow 2
+    400090: Roof Side Snow
+    400092: Roof Side Snow.001
+    400094: Window Pane
+    400096: Window Pane Single
+    400098: Floor Small
+    400100: Floor Wide
+    400102: Roof Corner 2
+    400104: Roof Corner 2.001
+    400106: Roof Corner 2 Snow
+    400108: Edging Corner 2
+    400110: House Wall Corner 2
+    400112: Particle Base
+    2100000: No Name
+    2100002: Wall
+    2100004: Interior
+    2100006: Exterior
+    2100008: Wood
+    2100010: Wood 3
+    2100012: Wood 4
+    2100014: Wood 2
+    2100016: Snow
+    2100018: Paint
+    2300000: Balcony Corner
+    2300002: Balcony Side
+    2300004: Balcony Side Center
+    2300006: Balcony Stair Entry 1
+    2300008: Balcony Stair Entry 2
+    2300010: Cube
+    2300012: Door
+    2300014: Edging Corner
+    2300016: Edging Side
+    2300018: Floor
+    2300020: House Corner
+    2300022: Large Tower Extension
+    2300024: Roof Corner
+    2300026: Roof Side
+    2300028: Stair Top
+    2300030: Stairs
+    2300032: Stairs Landing
+    2300034: Stairs Steep
+    2300036: Stairs.001
+    2300038: Tower Corner 1
+    2300040: Tower Corner 2 Bottom
+    2300042: Tower Corner 2 Top
+    2300044: Tower Corner Extension 1
+    2300046: Tower Door
+    2300048: Tower Extension 1
+    2300050: Tower Extension 2
+    2300052: House Side
+    2300054: Roof Center
+    2300056: Window Frame
+    2300058: Window Frame Small
+    2300060: Balcony Corner Small
+    2300062: Wood Floor
+    2300064: Snoaw Rail 1
+    2300066: Snoaw Rail 2
+    2300068: Snoaw Rail 3
+    2300070: Foundation
+    2300072: Foundation 2
+    2300074: Wood Floor 2
+    2300076: House Wall
+    2300078: House Wall Corner
+    2300080: Railing Exit
+    2300082: Roof Center Snow
+    2300084: Roof Corner Snow
+    2300086: Roof Corner Snow 2
+    2300088: Roof Side Snow
+    2300090: Roof Side Snow.001
+    2300092: Window Pane
+    2300094: Window Pane Single
+    2300096: Floor Small
+    2300098: Floor Wide
+    2300100: Roof Corner 2
+    2300102: Roof Corner 2.001
+    2300104: Roof Corner 2 Snow
+    2300106: Edging Corner 2
+    2300108: House Wall Corner 2
+    2300110: Particle Base
+    3300000: Balcony Corner
+    3300002: Balcony Side
+    3300004: Balcony Side Center
+    3300006: Balcony Stair Entry 1
+    3300008: Balcony Stair Entry 2
+    3300010: Cube
+    3300012: Door
+    3300014: Edging Corner
+    3300016: Edging Side
+    3300018: Floor
+    3300020: House Corner
+    3300022: Large Tower Extension
+    3300024: Roof Corner
+    3300026: Roof Side
+    3300028: Stair Top
+    3300030: Stairs
+    3300032: Stairs Landing
+    3300034: Stairs Steep
+    3300036: Stairs.001
+    3300038: Tower Corner 1
+    3300040: Tower Corner 2 Bottom
+    3300042: Tower Corner 2 Top
+    3300044: Tower Corner Extension 1
+    3300046: Tower Door
+    3300048: Tower Extension 1
+    3300050: Tower Extension 2
+    3300052: House Side
+    3300054: Roof Center
+    3300056: Window Frame
+    3300058: Window Frame Small
+    3300060: Balcony Corner Small
+    3300062: Wood Floor
+    3300064: Snoaw Rail 1
+    3300066: Snoaw Rail 2
+    3300068: Snoaw Rail 3
+    3300070: Foundation
+    3300072: Foundation 2
+    3300074: Wood Floor 2
+    3300076: House Wall
+    3300078: House Wall Corner
+    3300080: Railing Exit
+    3300082: Roof Center Snow
+    3300084: Roof Corner Snow
+    3300086: Roof Corner Snow 2
+    3300088: Roof Side Snow
+    3300090: Roof Side Snow.001
+    3300092: Window Pane
+    3300094: Window Pane Single
+    3300096: Floor Small
+    3300098: Floor Wide
+    3300100: Roof Corner 2
+    3300102: Roof Corner 2.001
+    3300104: Roof Corner 2 Snow
+    3300106: Edging Corner 2
+    3300108: House Wall Corner 2
+    3300110: Particle Base
+    4300000: Edging Side
+    4300002: Edging Corner
+    4300004: Roof Side
+    4300006: Roof Corner
+    4300008: Door
+    4300010: Large Tower Extension
+    4300012: Tower Door
+    4300014: Cube
+    4300016: House Corner
+    4300018: Stair Top
+    4300020: Balcony Stair Entry 2
+    4300022: Balcony Stair Entry 1
+    4300024: Balcony Side Center
+    4300026: Balcony Side
+    4300028: Balcony Corner
+    4300030: Floor
+    4300032: Stairs.001
+    4300034: Stairs Steep
+    4300036: Stairs
+    4300038: Stairs Landing
+    4300040: Tower Corner 2 Bottom
+    4300042: Tower Extension 2
+    4300044: Tower Corner 2 Top
+    4300046: Tower Corner Extension 1
+    4300048: Tower Extension 1
+    4300050: Tower Corner 1
+    4300052: House Side
+    4300054: Roof Center
+    4300056: Window Frame Small
+    4300058: Window Frame
+    4300060: Balcony Corner Small
+    4300062: Wood Floor
+    4300064: Snoaw Rail 3
+    4300066: Snoaw Rail 2
+    4300068: Snoaw Rail 1
+    4300070: Foundation
+    4300072: Foundation 2
+    4300074: Wood Floor 2
+    4300076: Railing Exit
+    4300078: Roof Center Snow
+    4300080: Roof Side Snow.001
+    4300082: Roof Corner Snow 2
+    4300084: Roof Corner Snow
+    4300086: Roof Side Snow
+    4300088: House Wall Corner
+    4300090: House Wall
+    4300092: Window Pane Single
+    4300094: Window Pane
+    4300096: Floor Small
+    4300098: Floor Wide
+    4300100: Roof Corner 2.001
+    4300102: Roof Corner 2
+    4300104: Roof Corner 2 Snow
+    4300106: House Wall Corner 2
+    4300108: Edging Corner 2
+    4300110: Particle Base
+  externalObjects: {}
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+    materialLocation: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    rigImportErrors: 
+    rigImportWarnings: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    importAnimatedCustomProperties: 0
+    importConstraints: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    extraUserProperties: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 0.6
+    meshCompression: 0
+    addColliders: 0
+    importVisibility: 1
+    importBlendShapes: 1
+    importCameras: 1
+    importLights: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    preserveHierarchy: 0
+    indexFormat: 0
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 0
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+    normalCalculationMode: 4
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    serializedVersion: 2
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    rootMotionBoneRotation: {x: 0, y: 0, z: 0, w: 1}
+    hasTranslationDoF: 0
+    hasExtraRoot: 0
+    skeletonHasParents: 1
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 0
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

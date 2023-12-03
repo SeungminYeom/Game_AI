@@ -11,7 +11,7 @@ public class Movement : MonoBehaviour
 
     protected Rigidbody rigid;
 
-    protected int waterMask;
+    protected int outOfWaterMask;
     protected int wallMask;
     protected int preyMask;
     protected int predatorMask;
@@ -24,12 +24,23 @@ public class Movement : MonoBehaviour
     protected Vector3 separationVec;
     protected Vector3 fleeVec;
 
+    private bool _isOutOfWater = false;
+    protected bool isOutOfWater
+    {
+        get { return _isOutOfWater; }
+        set
+        {
+            rigid.useGravity = value;
+            _isOutOfWater = value;
+        }
+    }
+
     protected void Start()
     {
         objInSight = new List<GameObject>();
         center = GameObject.Find("Center");
 
-        waterMask       = 1 << LayerMask.NameToLayer("Water");
+        outOfWaterMask  = 1 << LayerMask.NameToLayer("OutOfWater");
         wallMask        = 1 << LayerMask.NameToLayer("Wall");
         preyMask        = 1 << LayerMask.NameToLayer("Prey");
         predatorMask    = 1 << LayerMask.NameToLayer("Predator");
@@ -59,11 +70,11 @@ public class Movement : MonoBehaviour
         RaycastHit[] hit = new RaycastHit[4];
         RaycastHit closeToHit;
 
-        Physics.Raycast(transform.localPosition, transform.forward, out closeToHit, feelerLength * 2, waterMask);
-        Physics.Raycast(transform.localPosition, transform.forward + transform.right, out hit[0], feelerLength, waterMask);
-        Physics.Raycast(transform.localPosition, transform.forward - transform.right, out hit[1], feelerLength, waterMask);
-        Physics.Raycast(transform.localPosition, transform.forward + transform.up, out hit[2], feelerLength, waterMask);
-        Physics.Raycast(transform.localPosition, transform.forward - transform.up, out hit[3], feelerLength, waterMask);
+        Physics.Raycast(transform.localPosition, transform.forward, out closeToHit, feelerLength * 2, outOfWaterMask);
+        Physics.Raycast(transform.localPosition, transform.forward + transform.right, out hit[0], feelerLength, outOfWaterMask);
+        Physics.Raycast(transform.localPosition, transform.forward - transform.right, out hit[1], feelerLength, outOfWaterMask);
+        Physics.Raycast(transform.localPosition, transform.forward + transform.up, out hit[2], feelerLength, outOfWaterMask);
+        Physics.Raycast(transform.localPosition, transform.forward - transform.up, out hit[3], feelerLength, outOfWaterMask);
 
         // 가장 가까운 hit 찾기
         for (int i = 0; i < hit.Length; i++)
@@ -160,11 +171,28 @@ public class Movement : MonoBehaviour
         return dirVec;
     }
 
+    // Center를 중심으로 벗어나지 않기
     protected Vector3 Revolution(float distance)
     {
         Vector3 dirVec = center.transform.position - transform.position;
         dirVec = dirVec.normalized * Mathf.Pow((dirVec.magnitude / distance), 2);
 
         return dirVec;
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.layer == outOfWaterMask)
+        {
+            isOutOfWater = true;
+        }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.gameObject.layer == outOfWaterMask)
+        {
+            isOutOfWater = false;
+        }
     }
 }
