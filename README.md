@@ -1,7 +1,7 @@
 # Game_AI : 물멍 시뮬레이터 (Relaxing Underwater Simulator)
 <br/>
 
-## 1. Program Inroduce
+## 1. Program Introduce
 | 구분 | 설명 |
 | --- | --- | 
 | 프로젝트 이름 | Relaxing Underwater Simulator |   
